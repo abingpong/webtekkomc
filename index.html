@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CE-C-25</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+    <script>
+/* ======================================
+   PROTEKSI HALAMAN (CEK LOGIN TOKEN)
+====================================== */
+
+const token = localStorage.getItem("token");
+
+if(!token){
+    window.location.href = "login.html";
+}
+</script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="brand">
+            <div class="brand-left">
+                <h2>Teknik Komputer C.</h2>
+            </div>
+            <button class="close-sidebar" id="closeSidebarBtn"><i class='bx bx-x'></i></button>
+        </div>
+        
+        <div class="nav-menu">
+            <div class="nav-category">UMUM</div>
+            <button class="nav-btn active" onclick="switchView('dashboard', this)">
+                <i class='bx bx-grid-alt'></i> Beranda
+            </button>
+            <button class="nav-btn" onclick="switchView('anggota', this)">
+                <i class='bx bx-group'></i> Anggota Kelas
+            </button>
+            <button class="nav-btn" onclick="switchView('kas', this)">
+                <i class='bx bx-wallet'></i> Kas Kelas
+            </button>
+            
+            <div class="nav-category">AKADEMIK</div>
+            <button class="nav-btn" id="nav-modul" onclick="switchView('modul', this)">
+                <i class='bx bx-folder-open'></i> Ikhtisar Matkul
+            </button>
+            <button class="nav-btn" id="nav-jadwal" onclick="switchView('jadwal', this)">
+                <i class='bx bx-time-five'></i> Jadwal Kuliah
+            </button>
+            <button class="nav-btn" id="nav-kalender" onclick="switchView('kalender', this)">
+                <i class='bx bx-calendar-event'></i> Kalender
+            </button>
+            <button class="nav-btn" onclick="switchView('cover', this)">
+                <i class='bx bx-file-blank'></i> Cover Tugas
+            </button>
+
+            <div class="nav-category">MATA KULIAH</div>
+            <button class="nav-btn" style="font-size: 13px; padding: 10px 16px;" onclick="openCourseFromSidebar('Agama', this)">
+                <i class='bx bxs-circle' style="color: #3b82f6; font-size: 12px;"></i> Agama
+            </button>
+            <button class="nav-btn" style="font-size: 13px; padding: 10px 16px;" onclick="openCourseFromSidebar('Pemrograman Dasar 2', this)">
+                <i class='bx bxs-circle' style="color: #ef4444; font-size: 12px;"></i> Pemrog. Dasar 2
+            </button>
+            <button class="nav-btn" style="font-size: 13px; padding: 10px 16px;" onclick="openCourseFromSidebar('Prakt. Pemrograman Dasar 2', this)">
+                <i class='bx bxs-circle' style="color: #f43f5e; font-size: 12px;"></i> Prakt. Pemrog. Dasar
+            </button>
+            <button class="nav-btn" style="font-size: 13px; padding: 10px 16px;" onclick="openCourseFromSidebar('Matematika-2', this)">
+                <i class='bx bxs-circle' style="color: #a855f7; font-size: 12px;"></i> Matematika-2
+            </button>
+            <button class="nav-btn" style="font-size: 13px; padding: 10px 16px;" onclick="openCourseFromSidebar('Rangkaian Elektronika 2', this)">
+                <i class='bx bxs-circle' style="color: #f59e0b; font-size: 12px;"></i> Rangkaian Elektronika 2
+            </button>
+            <button class="nav-btn" style="font-size: 13px; padding: 10px 16px;" onclick="openCourseFromSidebar('Prakt. Rangkaian Elektronika 2', this)">
+                <i class='bx bxs-circle' style="color: #d97706; font-size: 12px;"></i> Prakt. R. Elektronika
+            </button>
+            <button class="nav-btn" style="font-size: 13px; padding: 10px 16px;" onclick="openCourseFromSidebar('Rangkaian Logika 2', this)">
+                <i class='bx bxs-circle' style="color: #10b981; font-size: 12px;"></i> Rangkaian Logika 2
+            </button>
+            <button class="nav-btn" style="font-size: 13px; padding: 10px 16px;" onclick="openCourseFromSidebar('Prakt. Rangkaian Logika 2', this)">
+                <i class='bx bxs-circle' style="color: #14b8a6; font-size: 12px;"></i> Prakt. R. Logika 2
+            </button>
+            <button class="nav-btn" style="font-size: 13px; padding: 10px 16px;" onclick="openCourseFromSidebar('Workshop Basis Data', this)">
+                <i class='bx bxs-circle' style="color: #06b6d4; font-size: 12px;"></i> W. Basis Data
+            </button>
+            <button class="nav-btn" style="font-size: 13px; padding: 10px 16px;" onclick="openCourseFromSidebar('Workshop Instrumentasi & Telemetri', this)">
+                <i class='bx bxs-circle' style="color: #6366f1; font-size: 12px;"></i> W. Instrumentasi
+            </button>
+        </div>
+
+        <div class="nav-category" style="margin-top: 24px;">BANTUAN</div>
+            
+            <button class="nav-btn" onclick="switchView('feedback', this)">
+                <i class='bx bx-message-square-dots' style="color: #f59e0b;"></i> Lapor Bug
+            </button>
+
+        <button class="nav-btn logout-btn" id="logoutBtn" style="margin-top: auto;">
+            <i class='bx bx-log-out'></i> Keluar
+        </button>
+    </div>
+
+    <div class="main-content">
+        
+        <div class="header">
+            <div class="header-left">
+                <button class="menu-toggle" id="menuToggleBtn"><i class='bx bx-menu'></i></button>
+                <div class="header-search" style="position: relative;">
+                    <i class='bx bx-search'></i>
+                    <input type="text" id="globalSearchInput" placeholder="Cari materi, tugas, acara, jadwal..." autocomplete="off">
+                    
+                    <div id="searchDropdown" style="display: none; position: absolute; top: 110%; left: 0; width: 100%; min-width: 300px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); z-index: 1000; overflow: hidden; max-height: 350px; overflow-y: auto;">
+                        </div>
+                </div>
+            </div>
+            
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <button class="theme-btn-header" id="themeToggleBtn" title="Ganti Tema">
+                    <i class='bx bx-cloud' id="themeIcon"></i>
+                </button>
+
+                <div style="position: relative;" id="notifWrapper">
+                    <button class="theme-btn-header" id="notifToggleBtn" title="Notifikasi" style="position: relative;">
+                        <i class='bx bx-bell'></i>
+                        <span id="notifBadge" style="display: none; position: absolute; top: -4px; right: -4px; background: #f43f5e; color: white; font-size: 10px; font-weight: 800; width: 18px; height: 18px; align-items: center; justify-content: center; border-radius: 50%; border: 2px solid var(--surface);">0</span>
+                    </button>
+                    
+                    <div id="notifDropdown" style="display: none; position: absolute; top: 45px; right: 0; width: 340px; background: var(--surface); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); z-index: 1000; overflow: hidden;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; border-bottom: 1px solid var(--border); background: var(--surface);">
+                            <h4 style="font-size: 16px; font-weight: 800; margin: 0; color: var(--text-main);">Notifikasi</h4>
+                            <div style="display: flex; gap: 12px;">
+                                <button id="markAllReadBtn" title="Tandai sudah dibaca" style="background: none; border: none; color: #10b981; cursor: pointer; font-size: 20px; display: flex; align-items: center;"><i class='bx bx-check-double'></i></button>
+                                <button id="clearNotifBtn" title="Hapus semua" style="background: none; border: none; color: #f43f5e; cursor: pointer; font-size: 18px; display: flex; align-items: center;"><i class='bx bx-trash'></i></button>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; gap: 8px; padding: 12px 16px; border-bottom: 1px solid var(--border); overflow-x: auto; background: var(--surface); scrollbar-width: none;" id="notifFilters">
+                            <button class="notif-filter-btn active" data-filter="all" style="padding: 6px 12px; border-radius: 20px; border: 1px solid var(--primary); background: var(--primary); color: white; font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.2s;">Semua</button>
+                            <button class="notif-filter-btn" data-filter="tugas" style="padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--text-muted); font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.2s;">Deadline</button>
+                            <button class="notif-filter-btn" data-filter="materi" style="padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--text-muted); font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.2s;">Modul Baru</button>
+                            <button class="notif-filter-btn" data-filter="acara" style="padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border); background: transparent; color: var(--text-muted); font-size: 12px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: 0.2s;">Acara</button>
+                        </div>
+                        
+                        <div id="notifList" style="max-height: 320px; overflow-y: auto; display: none;"></div>
+                        
+                        <div id="emptyNotif" style="display: block; padding: 40px 20px; text-align: center;">
+                            <i class='bx bx-bell-off' style="font-size: 48px; color: var(--border); margin-bottom: 16px;"></i>
+                            <h5 style="font-size: 15px; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">Tidak ada notifikasi</h5>
+                            <p style="font-size: 13px; color: var(--text-muted);">Semua info terbaru akan muncul di sini.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="user-profile">
+                    <div class="user-info" style="text-align: right;">
+                        <span id="userNameDisplay">Mahasiswa</span>
+                        <small id="userRoleDisplay">1 TKC 25</small>
+                    </div>
+                    <div class="avatar">U</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="dashboard" class="view-section active">
+            <div class="hero-banner">
+                <div class="hero-content">
+                    <h2 id="welcomeGreeting">Hai, Selamat Datang 👋</h2>
+                    <p>Mahasiswa Teknik Komputer C 2025 • PENS 2026</p>
+                </div>
+                <div class="hero-actions">
+                    <button class="btn btn-outline-white" onclick="document.getElementById('nav-kalender').click()"><i class='bx bx-calendar'></i> Lihat Agenda</button>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-bottom: 30px;">
+                <div class="card-box" style="margin-bottom: 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <h3 style="font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+                            <i class='bx bx-alarm-exclamation' style="color: #f59e0b; font-size: 22px;"></i> Tugas Terdekat
+                        </h3>
+                        <span style="background: rgba(245, 158, 11, 0.1); color: #f59e0b; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700;">Deadline Kritis</span>
+                    </div>
+                    <div id="widget-tugas-container"><p style="color: var(--text-muted); font-size: 13px;">Memindai tugas...</p></div>
+                </div>
+
+                <div class="card-box" style="margin-bottom: 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <h3 style="font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+                            <i class='bx bx-calendar-star' style="color: #3b82f6; font-size: 22px;"></i> Acara Terdekat
+                        </h3>
+                        <span style="background: rgba(59, 130, 246, 0.1); color: #3b82f6; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700;">Kalender Kelas</span>
+                    </div>
+                    <div id="widget-event-container"><p style="color: var(--text-muted); font-size: 13px;">Mencari agenda...</p></div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="main-column">
+
+                    <div class="card-box" style="margin-bottom: 30px; padding: 20px 24px;">
+                        <div class="box-header" style="margin-bottom: 16px;">
+                            <h3 style="font-size: 16px; display: flex; align-items: center; gap: 8px;">
+                                <i class='bx bx-link-external' style="color: #0ea5e9; font-size: 20px;"></i> Tautan Cepat
+                            </h3>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px;">
+                            
+                            <a href="https://ethol.pens.ac.id/" target="_blank" class="list-item" style="margin: 0; padding: 12px 16px; text-decoration: none;">
+                                <div class="item-icon" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;"><i class='bx bx-laptop'></i></div>
+                                <div class="item-info">
+                                    <h4 style="font-size: 14px; margin-bottom: 2px;">ETHOL PENS</h4>
+                                    <small style="font-size: 11px; opacity: 0.8;">E-Learning & Kuliah</small>
+                                </div>
+                            </a>
+                            
+                            <a href="https://online.mis.pens.ac.id/" target="_blank" class="list-item" style="margin: 0; padding: 12px 16px; text-decoration: none;">
+                                <div class="item-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;"><i class='bx bx-data'></i></div>
+                                <div class="item-info">
+                                    <h4 style="font-size: 14px; margin-bottom: 2px;">Online MIS</h4>
+                                    <small style="font-size: 11px; opacity: 0.8;">Sistem Akademik</small>
+                                </div>
+                            </a>
+
+                        </div>
+                    </div>
+                    <div class="card-box">
+                        <div class="box-header">
+                            <h3><i class='bx bx-book-bookmark'></i> Sekilas Mata Kuliah</h3>
+                            <a href="#" class="link-muted" onclick="document.getElementById('nav-modul').click()">Lihat Semua</a>
+                        </div>
+                        <div class="list-group">
+                            <div class="list-item" onclick="document.getElementById('nav-modul').click()">
+                                <div class="item-icon bg-indigo"><i class='bx bx-book'></i></div>
+                                <div class="item-info"><h4>Agama</h4><small><i class='bx bx-map'></i> SAW-04.08 • Senin</small></div>
+                                <i class='bx bx-chevron-right item-arrow'></i>
+                            </div>
+                            <div class="list-item" onclick="document.getElementById('nav-modul').click()">
+                                <div class="item-icon bg-rose"><i class='bx bx-chip'></i></div>
+                                <div class="item-info"><h4>Rangkaian Elektronika 2</h4><small><i class='bx bx-map'></i> B 304 • Selasa</small></div>
+                                <i class='bx bx-chevron-right item-arrow'></i>
+                            </div>
+                            <div class="list-item" onclick="document.getElementById('nav-modul').click()">
+                                <div class="item-icon bg-emerald"><i class='bx bx-git-merge'></i></div>
+                                <div class="item-info"><h4>Rangkaian Logika 2</h4><small><i class='bx bx-map'></i> SAW-04.08 • Rabu</small></div>
+                                <i class='bx bx-chevron-right item-arrow'></i>
+                            </div>
+                            <div class="list-item" onclick="document.getElementById('nav-modul').click()">
+                                <div class="item-icon bg-amber"><i class='bx bx-data'></i></div>
+                                <div class="item-info"><h4>Workshop Basis Data</h4><small><i class='bx bx-map'></i> HI-202 • Kamis</small></div>
+                                <i class='bx bx-chevron-right item-arrow'></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-box">
+                    <div class="box-header">
+                        <h3><i class='bx bx-history'></i> Aktivitas Terbaru</h3>
+                    </div>
+                    <div class="timeline" id="activity-log-container"></div>
+                </div>
+            </div>
+        </div> 
+        
+        <div id="modul" class="view-section">
+            <div id="course-list-view">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px;">
+                    <div>
+                        <h2 style="font-size: 26px; font-weight: 700; margin-bottom: 6px;">Mata Kuliah</h2>
+                        <p style="color: var(--text-muted); font-weight: 500;">Pilih mata kuliah untuk melihat detail dan materi.</p>
+                    </div>
+                </div>
+                
+                <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 24px;">
+                    <div class="card-box course-card" style="margin-bottom:0;" onclick="openCourse('Agama')"><div class="folder-icon"><i class='bx bx-book'></i></div><h4 style="font-size: 15px; font-weight: 600;">Agama</h4></div>
+                    <div class="card-box course-card" style="margin-bottom:0;" onclick="openCourse('Pemrograman Dasar 2')"><div class="folder-icon"><i class='bx bx-code-block'></i></div><h4 style="font-size: 15px; font-weight: 600;">Pemrograman Dasar 2</h4></div>
+                    <div class="card-box course-card" style="margin-bottom:0;" onclick="openCourse('Prakt. Pemrograman Dasar 2')"><div class="folder-icon"><i class='bx bx-code-alt'></i></div><h4 style="font-size: 15px; font-weight: 600;">Prakt. Pemrograman Dasar 2</h4></div>
+                    <div class="card-box course-card" style="margin-bottom:0;" onclick="openCourse('Matematika-2')"><div class="folder-icon"><i class='bx bx-math'></i></div><h4 style="font-size: 15px; font-weight: 600;">Matematika-2</h4></div>
+                    <div class="card-box course-card" style="margin-bottom:0;" onclick="openCourse('Rangkaian Elektronika 2')"><div class="folder-icon"><i class='bx bx-chip'></i></div><h4 style="font-size: 15px; font-weight: 600;">Rangkaian Elektronika 2</h4></div>
+                    <div class="card-box course-card" style="margin-bottom:0;" onclick="openCourse('Prakt. Rangkaian Elektronika 2')"><div class="folder-icon"><i class='bx bx-microchip'></i></div><h4 style="font-size: 15px; font-weight: 600;">Prakt. Rangkaian Elektronika 2</h4></div>
+                    <div class="card-box course-card" style="margin-bottom:0;" onclick="openCourse('Rangkaian Logika 2')"><div class="folder-icon"><i class='bx bx-git-merge'></i></div><h4 style="font-size: 15px; font-weight: 600;">Rangkaian Logika 2</h4></div>
+                    <div class="card-box course-card" style="margin-bottom:0;" onclick="openCourse('Prakt. Rangkaian Logika 2')"><div class="folder-icon"><i class='bx bx-network-chart'></i></div><h4 style="font-size: 15px; font-weight: 600;">Prakt. Rangkaian Logika 2</h4></div>
+                    <div class="card-box course-card" style="margin-bottom:0;" onclick="openCourse('Workshop Basis Data')"><div class="folder-icon"><i class='bx bx-data'></i></div><h4 style="font-size: 15px; font-weight: 600;">Workshop Basis Data</h4></div>
+                    <div class="card-box course-card" style="margin-bottom:0;" onclick="openCourse('Workshop Instrumentasi & Telemetri')"><div class="folder-icon"><i class='bx bx-broadcast'></i></div><h4 style="font-size: 15px; font-weight: 600;">Workshop Instrumentasi</h4></div>
+                </div>
+            </div>
+
+            <div id="course-detail-view" style="display: none;">
+                <div style="background: linear-gradient(135deg, var(--primary), #a855f7); border-radius: var(--radius-lg); padding: 30px 40px; color: white; margin-bottom: 24px; position: relative; overflow: hidden; box-shadow: var(--shadow); display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 20px;">
+                    <div style="position: relative; z-index: 2;">
+                        <button class="btn btn-outline-white" style="margin-bottom: 20px; border: none; background: rgba(255,255,255,0.2); padding: 8px 16px;" onclick="closeCourse()">
+                            <i class='bx bx-arrow-back'></i> Kembali ke List
+                        </button>
+                        <h2 id="detailCourseTitle" style="font-size: 32px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px;">Judul Matkul</h2>
+                        <p id="detailCourseInfo" style="font-size: 15px; opacity: 0.9; margin-bottom: 20px; font-weight: 500;">3 SKS • Semester Genap</p>
+                        <div style="display: inline-flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.2); padding: 8px 16px; border-radius: 100px; font-size: 14px; font-weight: 600; backdrop-filter: blur(5px);">
+                            <i class='bx bx-user-circle' style="font-size: 20px;"></i> Dosen PJ: <span id="detailCoursePJ">Nama Dosen</span>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap; position: relative; z-index: 2;">
+                        <button id="btnAksesPJ" class="btn btn-outline-white" style="font-size: 13px; padding: 8px 16px; background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.4);" onclick="promptPJAkses()">
+                            <i class='bx bx-lock-alt'></i> Akses PJ Matkul
+                        </button>
+                        <button id="btnUploadModul" class="btn btn-primary" style="display: none; font-size: 13px; padding: 8px 16px; background: #10b981; border: none; box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);" onclick="openAddModulModal()">
+                            <i class='bx bx-cloud-upload'></i> Upload Modul
+                        </button>
+                        <button id="btnUploadTugas" class="btn btn-primary" style="display: none; font-size: 13px; padding: 8px 16px; background: #f59e0b; border: none; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);" onclick="openAddTugasModal()">
+                            <i class='bx bx-task'></i> Tambah Tugas
+                        </button>
+                    </div>
+                    <i class='bx bx-book-reader' style="position: absolute; right: -20px; bottom: -30px; font-size: 180px; opacity: 0.1; transform: rotate(-15deg); z-index: 1;"></i>
+                </div>
+
+                <div class="course-tabs" style="margin-bottom: 24px;">
+                    <button class="course-tab-btn active" onclick="switchCourseTab('materi', this)">Materi & Modul</button>
+                    <button class="course-tab-btn" onclick="switchCourseTab('tugas', this)">Tugas Terkait</button>
+                    <button class="course-tab-btn" onclick="switchCourseTab('jadwal', this)">Jadwal Kelas</button>
+                </div>
+
+                <div id="tab-materi" class="course-tab-content active">
+                    <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px;" id="module-items-container"></div>
+                </div>
+
+                <div id="tab-tugas" class="course-tab-content" style="display: none;">
+                    <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px;" id="task-items-container">
+                        <div class="card-box" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; border: 2px dashed var(--border); background: transparent;">
+                            <i class='bx bx-task' style="font-size: 56px; color: var(--text-muted); opacity: 0.5; margin-bottom: 16px;"></i>
+                            <h4 style="font-size: 18px; margin-bottom: 8px; color: var(--text-main);">Belum Ada Tugas</h4>
+                            <p style="color: var(--text-muted);">Tugas yang diberikan oleh dosen PJ akan muncul di sini.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tab-jadwal" class="course-tab-content">
+                    <div class="card-box">
+                        <div class="box-header"><h3><i class='bx bx-time'></i> Informasi Waktu</h3></div>
+                        <div id="jadwal-info-container" style="padding: 10px 0;"></div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+
+        <div id="jadwal" class="view-section">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; flex-wrap: wrap; gap: 10px;">
+                <div>
+                    <h2 style="font-size: 26px; font-weight: 700; margin-bottom: 6px;">Jadwal Perkuliahan</h2>
+                    <p style="color: var(--text-muted); font-weight: 500;">Daftar tatap muka mingguan.</p>
+                </div>
+                <div style="background-color: rgba(245, 158, 11, 0.1); color: #f59e0b; padding: 10px 20px; border-radius: 12px; font-size: 13px; font-weight: 700;">
+                    <i class='bx bx-coffee'></i> Istirahat: 12.00 - 12.30 WIB
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px;">
+                <div class="card-box" style="margin-bottom: 0;">
+                    <div class="box-header"><h3><i class='bx bx-calendar'></i> Senin</h3></div>
+                    <div class="list-group">
+                        <div class="list-item"><div class="item-icon bg-indigo"><i class='bx bx-book-content'></i></div><div class="item-info"><h4>Agama</h4><small>11:20 - 13:10 • SAW-04.08</small><small style="color: var(--primary); margin-top:4px;">Imamul Arifin</small></div></div>
+                        <div class="list-item"><div class="item-icon bg-indigo"><i class='bx bx-code-alt'></i></div><div class="item-info"><h4>Prakt. Pemrograman Dasar 2</h4><small>13:10 - 14:30 • HI-204</small><small style="color: var(--primary); margin-top:4px;">Sigit Wasista</small></div></div>
+                    </div>
+                </div>
+                <div class="card-box" style="margin-bottom: 0;">
+                    <div class="box-header"><h3><i class='bx bx-calendar'></i> Selasa</h3></div>
+                    <div class="list-group">
+                        <div class="list-item"><div class="item-icon bg-rose"><i class='bx bx-chip'></i></div><div class="item-info"><h4>Rangkaian Elektronika 2</h4><small>08:00 - 09:20 • B 304</small><small style="color: var(--primary); margin-top:4px;">Bayu Sandi Marta</small></div></div>
+                        <div class="list-item"><div class="item-icon bg-rose"><i class='bx bx-math'></i></div><div class="item-info"><h4>Matematika-2</h4><small>10:00 - 11:20 • B 203</small><small style="color: var(--primary); margin-top:4px;">Tri Harsono</small></div></div>
+                        <div class="list-item"><div class="item-icon bg-rose"><i class='bx bx-code-block'></i></div><div class="item-info"><h4>Pemrograman Dasar 2</h4><small>12:30 - 13:50 • B 303</small><small style="color: var(--primary); margin-top:4px;">Sigit Wasista</small></div></div>
+                    </div>
+                </div>
+                <div class="card-box" style="margin-bottom: 0;">
+                    <div class="box-header"><h3><i class='bx bx-calendar'></i> Rabu</h3></div>
+                    <div class="list-group">
+                        <div class="list-item"><div class="item-icon bg-emerald"><i class='bx bx-git-merge'></i></div><div class="item-info"><h4>Rangkaian Logika 2</h4><small>08:40 - 10:00 • SAW-04.08</small><small style="color: var(--primary); margin-top:4px;">Fernando Ardilla</small></div></div>
+                        <div class="list-item"><div class="item-icon bg-emerald"><i class='bx bx-microchip'></i></div><div class="item-info"><h4>Prakt. Rangkaian Elektronika 2</h4><small>10:40 - 12:00 • HI-303</small><small style="color: var(--primary); margin-top:4px;">Fernando Ardilla</small></div></div>
+                    </div>
+                </div>
+                <div class="card-box" style="margin-bottom: 0;">
+                    <div class="box-header"><h3><i class='bx bx-calendar'></i> Kamis</h3></div>
+                    <div class="list-group">
+                        <div class="list-item"><div class="item-icon bg-amber"><i class='bx bx-network-chart'></i></div><div class="item-info"><h4>Prakt. Rangkaian Logika 2</h4><small>08:00 - 09:20 • HI-304</small><small style="color: var(--primary); margin-top:4px;">Fernando Ardilla</small></div></div>
+                        <div class="list-item"><div class="item-icon bg-amber"><i class='bx bx-data'></i></div><div class="item-info"><h4>Workshop Basis Data</h4><small>09:20 - 11:20 • HI-202</small><small style="color: var(--primary); margin-top:4px;">Dwi Kurnia Basuki</small></div></div>
+                        <div class="list-item"><div class="item-icon bg-amber"><i class='bx bx-broadcast'></i></div><div class="item-info"><h4>Workshop Instrumentasi</h4><small>12:30 - 14:30 • HI-304</small><small style="color: var(--primary); margin-top:4px;">Dewi Mutiara Sari</small></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="kalender" class="view-section">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; flex-wrap: wrap; gap: 10px;">
+                <div>
+                    <h2 style="font-size: 26px; font-weight: 700; margin-bottom: 6px;">Kalender Interaktif</h2>
+                    <p style="color: var(--text-muted); font-weight: 500;">Pantau tanggal penting di sini.</p>
+                </div>
+                <button class="btn btn-primary admin-only" onclick="openAddEventModal()"><i class='bx bx-plus'></i> Tambah Acara</button>
+            </div>
+            <div class="card-box" style="padding: 0; overflow: hidden; border-radius: 20px;">
+                <div class="calendar-header">
+                    <button class="btn-icon" onclick="changeMonth(-1)"><i class='bx bx-left-arrow-alt'></i></button>
+                    <h3 id="calendarMonthYear" style="font-size: 18px; font-weight: 700; color: var(--primary);">Februari 2026</h3>
+                    <button class="btn-icon" onclick="changeMonth(1)"><i class='bx bx-right-arrow-alt'></i></button>
+                </div>
+                <div class="calendar-grid-wrapper">
+                    <div class="calendar-grid" id="calendarGrid">
+                        <div class="cal-day-name">Min</div><div class="cal-day-name">Sen</div><div class="cal-day-name">Sel</div><div class="cal-day-name">Rab</div><div class="cal-day-name">Kam</div><div class="cal-day-name">Jum</div><div class="cal-day-name">Sab</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div id="cover" class="view-section"><h2 style="margin-bottom:20px;">Cover Praktikum</h2><p class="subtitle">Segera hadir.</p></div>
+        <div id="anggota" class="view-section"><h2 style="margin-bottom:20px;">Anggota Kelas</h2><p class="subtitle">Segera hadir.</p></div>
+        
+        <div id="kas" class="view-section">
+            
+            <div style="background: linear-gradient(135deg, var(--primary), #3b82f6); border-radius: var(--radius-lg); padding: 24px 30px; color: white; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; box-shadow: var(--shadow);">
+                <div>
+                    <h2 style="font-size: 24px; font-weight: 800; margin-bottom: 6px; display: flex; align-items: center; gap: 10px;">
+                        <i class='bx bx-money-withdraw' style="color: #fde047;"></i> Kas Kelas
+                    </h2>
+                    <p style="font-size: 14px; font-weight: 500; opacity: 0.9;">1 TKC STr • Rp 5.000 / 2 Minggu</p>
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="btn btn-outline-white" style="font-size: 13px; padding: 8px 16px;" onclick="openGeneralQrisModal()"><i class='bx bx-qr-scan'></i> Bayar via QRIS</button>
+                    <button class="btn btn-outline-white" style="font-size: 13px; padding: 8px 16px;" onclick="promptBendahara()" id="btnAksesBendahara">
+                        <i class='bx bx-lock-alt' id="bendaharaLockIcon"></i> Akses Bendahara
+                    </button>
+                </div>
+            </div>
+
+            <div class="course-tabs" style="margin-bottom: 24px;">
+                <button class="course-tab-btn kas-tab-btn active" onclick="switchKasTab('ringkasan', this)"><i class='bx bx-bar-chart-alt-2'></i> Ringkasan</button>
+                <button class="course-tab-btn kas-tab-btn" onclick="switchKasTab('perminggu', this)"><i class='bx bx-table'></i> Rekap Kelas</button>
+                <button class="course-tab-btn kas-tab-btn" onclick="switchKasTab('anda', this)"><i class='bx bx-user-circle'></i> Kas Anda</button>
+                <button class="course-tab-btn kas-tab-btn" onclick="switchKasTab('riwayat', this)"><i class='bx bx-history'></i> Riwayat Kas Kelas</button>
+            </div>
+
+            <div id="kas-ringkasan" class="kas-tab-content" style="display: block; animation: smoothFade 0.4s ease forwards;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 20px;">
+                    <div class="card-box" style="margin-bottom: 0; border-bottom: 4px solid #10b981;">
+                        <small style="color: var(--text-muted); font-weight: 700;"><i class='bx bx-money' style="color: #10b981;"></i> Total Terkumpul</small>
+                        <h3 id="kas-terkumpul" style="font-size: 26px; font-weight: 800; color: #10b981; margin-top: 12px;">Rp 0</h3>
+                    </div>
+                    <div class="card-box" style="margin-bottom: 0; border-bottom: 4px solid #0ea5e9;">
+                        <small style="color: var(--text-muted); font-weight: 700;"><i class='bx bxs-bank' style="color: #0ea5e9;"></i> Saldo Bersih</small>
+                        <h3 id="kas-saldo" style="font-size: 26px; font-weight: 800; color: #0ea5e9; margin-top: 12px;">Rp 0</h3>
+                    </div>
+                    <div class="card-box" style="margin-bottom: 0; border-bottom: 4px solid #f43f5e;">
+                        <small style="color: var(--text-muted); font-weight: 700;"><i class='bx bx-error-circle' style="color: #f43f5e;"></i> Total Tunggakan</small>
+                        <h3 id="kas-tunggakan" style="font-size: 26px; font-weight: 800; color: #f43f5e; margin-top: 12px;">Rp 0</h3>
+                    </div>
+                    <div class="card-box" style="margin-bottom: 0; border-bottom: 4px solid #f59e0b;">
+                        <small style="color: var(--text-muted); font-weight: 700;"><i class='bx bx-upload' style="color: #f59e0b;"></i> Pengeluaran</small>
+                        <h3 id="kas-pengeluaran" style="font-size: 26px; font-weight: 800; color: #f59e0b; margin-top: 12px;">Rp 138.000</h3>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-bottom: 24px;">
+                    <div class="card-box" style="margin-bottom: 0; padding: 16px; text-align: center;"><h4 id="kas-lunas" style="font-size: 22px; font-weight: 800; color: #10b981; margin-bottom: 4px;">0</h4><small style="color: var(--text-muted); font-weight: 600;">Siswa Lunas</small></div>
+                    <div class="card-box" style="margin-bottom: 0; padding: 16px; text-align: center;"><h4 id="kas-menunggak" style="font-size: 22px; font-weight: 800; color: #f43f5e; margin-bottom: 4px;">0</h4><small style="color: var(--text-muted); font-weight: 600;">Siswa Nunggak</small></div>
+                    <div class="card-box" style="margin-bottom: 0; padding: 16px; text-align: center;"><h4 id="kas-minggu-aktif" style="font-size: 22px; font-weight: 800; color: #3b82f6; margin-bottom: 4px;">0</h4><small style="color: var(--text-muted); font-weight: 600;">Tagihan Aktif</small></div>
+                    <div class="card-box" style="margin-bottom: 0; padding: 16px; text-align: center;"><h4 style="font-size: 22px; font-weight: 800; color: #a855f7; margin-bottom: 4px;">0</h4><small style="color: var(--text-muted); font-weight: 600;">Pending</small></div>
+                </div>
+
+                <div class="card-box" style="margin-bottom: 24px;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 16px;">
+                        <div><h4 style="font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">Progress Pengumpulan Kas</h4></div>
+                        <h3 id="kas-progress-text" style="font-size: 28px; font-weight: 800; color: var(--primary);">0%</h3>
+                    </div>
+                    <div style="width: 100%; background-color: var(--border); border-radius: 100px; height: 12px; overflow: hidden; position: relative;">
+                        <div id="kas-progress-bar" style="width: 0%; background: linear-gradient(90deg, #3b82f6, #a855f7); height: 100%; border-radius: 100px; transition: width 1s ease;"></div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr; gap: 24px;">
+                    <div class="card-box" style="margin-bottom: 0; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid var(--primary); padding: 20px;">
+                        <div style="display: flex; align-items: center; gap: 16px;">
+                            <div style="width: 50px; height: 50px; background: rgba(99, 102, 241, 0.1); color: var(--primary); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px;"><i class='bx bx-calendar-star'></i></div>
+                            <div><small style="color: var(--text-muted); font-weight: 600;">Jadwal Pembayaran Berikutnya</small><h4 id="kas-next-date" style="font-size: 16px; font-weight: 700; color: var(--text-main); margin: 4px 0;">Menghitung tanggal...</h4><small style="color: var(--primary); font-weight: 700;">Senin ke-1 / ke-3 setiap bulan</small></div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-box" style="margin-bottom: 0; padding: 0; overflow: hidden;">
+                        <div style="padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: rgba(244, 63, 94, 0.03);">
+                            <h4 style="font-size: 15px; font-weight: 700; color: #f43f5e; display: flex; align-items: center; gap: 8px;"><i class='bx bx-error-alt'></i> Daftar Anggota Menunggak</h4>
+                            <span id="kas-badge-menunggak" style="background: #f43f5e; color: white; padding: 4px 12px; border-radius: 100px; font-size: 13px; font-weight: 700;">0</span>
+                        </div>
+                        <div class="list-group" id="kas-list-menunggak" style="padding: 0 20px; gap: 0;"></div>
+                    </div>
+                </div>
+            </div> 
+            
+            <div id="kas-perminggu" class="kas-tab-content" style="display: none; animation: smoothFade 0.4s ease forwards;">
+                <div class="card-box" style="padding: 0; overflow: hidden; border-radius: var(--radius-md);">
+                    <div style="padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; background: var(--surface);">
+                        <div><h4 style="font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">Rekapitulasi Kas </h4><p style="font-size: 13px; color: var(--text-muted); font-weight: 500;">Mode Bendahara: Klik ikon <i class='bx bx-x' style="color: #f43f5e;"></i>/<i class='bx bx-check' style="color: #10b981;"></i> untuk mengubah status.</p></div>
+                        <div style="display: flex; gap: 16px; font-size: 12px; font-weight: 600; color: var(--text-muted); background: var(--bg-color); padding: 8px 16px; border-radius: 100px; border: 1px solid var(--border);">
+                            <span style="display: flex; align-items: center; gap: 6px;"><i class='bx bx-check' style="color: #10b981; font-size: 16px;"></i> Lunas</span>
+                            <span style="display: flex; align-items: center; gap: 6px;"><i class='bx bx-x' style="color: #f43f5e; font-size: 16px;"></i> Nunggak</span>
+                        </div>
+                    </div>
+                    
+                    <div style="overflow-x: auto; max-height: 500px; overflow-y: auto;">
+                        <table style="width: 100%; border-collapse: separate; border-spacing: 0; min-width: 900px; text-align: center; font-size: 13px;">
+                            <thead id="table-kas-minggu-head" style="position: sticky; top: 0; z-index: 10;"></thead>
+                            <tbody id="table-kas-minggu-body"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="kas-anda" class="kas-tab-content" style="display: none; animation: smoothFade 0.4s ease forwards;">
+                <div style="background: linear-gradient(135deg, #10b981, #059669); border-radius: var(--radius-lg); padding: 24px 30px; color: white; margin-bottom: 24px; box-shadow: var(--shadow); position: relative; overflow: hidden;">
+                    <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 4px;">Rincian Kas Pribadi</h3>
+                    <p style="font-size: 15px; font-weight: 500; opacity: 0.9;" id="kas-anda-nama">Memuat data...</p>
+                    <i class='bx bx-wallet' style="position: absolute; right: -10px; bottom: -20px; font-size: 100px; opacity: 0.1; transform: rotate(-15deg);"></i>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 24px;">
+                    <div class="card-box" style="margin-bottom: 0; border-bottom: 4px solid #10b981;"><small style="color: var(--text-muted); font-weight: 700;"><i class='bx bx-check-double'></i> Telah Dibayar</small><h3 id="kas-anda-dibayar" style="font-size: 26px; font-weight: 800; color: #10b981; margin-top: 8px;">Rp 0</h3></div>
+                    <div class="card-box" style="margin-bottom: 0; border-bottom: 4px solid #f43f5e; display: flex; flex-direction: column; justify-content: space-between;">
+                        <div>
+                            <small style="color: var(--text-muted); font-weight: 700;"><i class='bx bx-error-circle'></i> Kekurangan (Tagihan)</small>
+                            <h3 id="kas-anda-kurang" style="font-size: 26px; font-weight: 800; color: #f43f5e; margin-top: 8px;">Rp 0</h3>
+                        </div>
+                        <button id="btnBayarKasAnda" class="btn btn-primary" style="display: none; margin-top: 16px; width: 100%; font-size: 13px; padding: 8px; background: #f43f5e; border: none;">
+                            <i class='bx bx-qr-scan'></i> Bayar Sekarang
+                        </button>
+                    </div>
+                    <div class="card-box" style="margin-bottom: 0;"><small style="color: var(--text-muted); font-weight: 700;"><i class='bx bx-calendar-check'></i> Total Lunas</small><h3 id="kas-anda-lunas" style="font-size: 26px; font-weight: 800; color: var(--text-main); margin-top: 8px;">0 <span style="font-size: 14px; color: var(--text-muted);">Kali</span></h3></div>
+                    <div class="card-box" style="margin-bottom: 0;"><small style="color: var(--text-muted); font-weight: 700;"><i class='bx bx-calendar-x'></i> Total Nunggak</small><h3 id="kas-anda-nunggak" style="font-size: 26px; font-weight: 800; color: var(--text-main); margin-top: 8px;">0 <span style="font-size: 14px; color: var(--text-muted);">Kali</span></h3></div>
+                </div>
+                <div class="card-box" style="margin-bottom: 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 16px;">
+                        <div><h4 style="font-size: 16px; font-weight: 700; color: var(--text-main); margin-bottom: 4px;">Persentase Kepatuhan</h4></div>
+                        <h3 id="kas-anda-progress-text" style="font-size: 28px; font-weight: 800; color: var(--primary);">0%</h3>
+                    </div>
+                    <div style="width: 100%; background-color: var(--border); border-radius: 100px; height: 12px; overflow: hidden;"><div id="kas-anda-progress-bar" style="width: 0%; background: linear-gradient(90deg, #10b981, #3b82f6); height: 100%; border-radius: 100px; transition: width 1s ease;"></div></div>
+                </div>
+            </div>
+
+            <div id="kas-riwayat" class="kas-tab-content" style="display: none; animation: smoothFade 0.4s ease forwards;">
+                
+                <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+                    <button class="btn btn-primary" id="btnTambahPengeluaran" onclick="openAddExpenseModal()" style="display: none; background: #f43f5e; box-shadow: 0 4px 15px rgba(244, 63, 94, 0.3);">
+                        <i class='bx bx-plus'></i> Catat Pengeluaran
+                    </button>
+                </div>
+
+                <div class="card-box" style="margin-bottom: 0; padding: 0; overflow: hidden;">
+                    <div style="padding: 20px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: rgba(245, 158, 11, 0.05);">
+                        <h4 style="font-size: 15px; font-weight: 700; color: #d97706; display: flex; align-items: center; gap: 8px;"><i class='bx bx-history'></i> Riwayat Pengeluaran</h4>
+                        <span id="totalPengeluaranBadge" style="background: #f59e0b; color: white; padding: 4px 12px; border-radius: 100px; font-size: 13px; font-weight: 700;">Total: Rp 0</span>
+                    </div>
+                    
+                    <div class="list-group" id="kas-history-list" style="padding: 0 20px; gap: 0;"></div>
+                </div>
+            </div>
+
+        </div> <div id="feedback" class="view-section">
+            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; flex-wrap: wrap; gap: 10px;">
+                <div>
+                    <h2 style="font-size: 26px; font-weight: 700; margin-bottom: 6px;">Lapor Bug</h2>
+                    <p style="color: var(--text-muted); font-weight: 500;">Sampaikan ide fitur baru atau laporkan error pada sistem.</p>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="main-column">
+                    <div class="card-box" style="position: sticky; top: 20px;">
+                        <h3 style="margin-bottom: 20px; font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 8px;">
+                            <i class='bx bx-edit-alt' style="color: var(--primary); font-size: 22px;"></i> Buat Laporan Baru
+                        </h3>
+                        <form id="formFeedback">
+                            <div class="form-group" style="margin-bottom: 16px;">
+                                <label style="display: block; font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Kategori <span style="color: #f43f5e;">*</span></label>
+                                <select id="fbKategori" class="form-control" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-main);">
+                                    <option value="Bug">🐛 Lapor Bug (Error)</option>
+                                    <option value="Fitur">✨ Request Fitur Baru</option>
+                                    <option value="Pertanyaan">💡 Pertanyaan / Saran</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 20px;">
+                                <label style="display: block; font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Pesan Detail <span style="color: #f43f5e;">*</span></label>
+                                <textarea id="fbPesan" class="form-control" rows="4" required placeholder="Jelaskan secara detail apa masalahnya atau fitur apa yang kamu inginkan..." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-main); font-family: inherit; resize: vertical;"></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 14px;"><i class='bx bx-send'></i> Kirim Pesan</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="card-box" style="padding: 0; overflow: hidden; border-radius: 20px;">
+                    <div style="padding: 20px; border-bottom: 1px solid var(--border); background: var(--surface);">
+                        <h3 style="font-size: 16px; font-weight: 800; display: flex; align-items: center; gap: 8px; color: var(--text-main);">
+                            <i class='bx bx-conversation' style="color: #10b981; font-size: 22px;"></i> Forum Diskusi & Laporan
+                        </h3>
+                    </div>
+                    <div id="feedbackListContainer" style="padding: 20px; display: flex; flex-direction: column; gap: 20px; max-height: 600px; overflow-y: auto; background: var(--bg-color);">
+                        </div>
+                </div>
+            </div>
+        </div>
+
+    </div> <div id="addModulModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class='bx bx-cloud-upload' style="color: var(--primary);"></i> Tambah Modul Baru</h3>
+                <button class="close-modal" onclick="closeAddModulModal()"><i class='bx bx-x'></i></button>
+            </div>
+            <form id="addModulForm">
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label style="display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px;">Judul Modul / Materi <span style="color: #f43f5e;">*</span></label>
+                    <input type="text" id="modulTitle" class="form-control" required placeholder="Contoh: PPT Pertemuan 1" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-main);">
+                </div>
+                
+                <div style="background: var(--bg-color); border: 1px dashed var(--border); padding: 16px; border-radius: 12px; margin-bottom: 24px;">
+                    <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px; text-align: center;">Pilih salah satu: <b>Upload File</b> ATAU <b>Masukkan Link</b></p>
+                    
+                    <div class="form-group" style="margin-bottom: 16px;">
+                        <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px;">1. File Materi (Opsional)</label>
+                        <input type="file" id="modulFile" class="form-control" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text-main);">
+                    </div>
+                    
+                    <div style="text-align: center; font-size: 11px; color: var(--text-muted); font-weight: 800; margin-bottom: 16px;">— ATAU —</div>
+                    
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px;">2. Link Eksternal (Opsional)</label>
+                        <input type="url" id="modulLink" class="form-control" placeholder="Contoh: https://drive.google.com/..." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--surface); color: var(--text-main);">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 12px; font-size: 14px;"><i class='bx bx-save'></i> Simpan ke Sistem</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="addEventModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3>Tambah Acara Baru</h3>
+                <button class="close-modal" onclick="closeAddEventModal()"><i class='bx bx-x'></i></button>
+            </div>
+            <form id="addEventForm">
+                <div class="form-group"><label>Nama Agenda</label><input type="text" id="eventName" class="form-control" required placeholder="Contoh: Presentasi Final"></div>
+                <div class="form-group"><label>Pilih Tanggal</label><input type="date" id="eventDate" class="form-control" required></div>
+                <div class="form-group" style="margin-bottom: 30px;"><label>Status Kehadiran</label><select id="eventAttendance" class="form-control" required style="appearance: none;"><option value="wajib">Wajib Datang</option><option value="opsional">Hanya Opsional</option></select></div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Tandai di Kalender</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="qrisModal" class="modal-overlay">
+        <div class="modal-card" style="max-width: 400px; text-align: center;">
+            <div class="modal-header" style="border-bottom: none; padding-bottom: 0;">
+                <h3 style="width: 100%; text-align: center;">💸 Pembayaran Kas</h3>
+                <button class="close-modal" onclick="closeQrisModal()"><i class='bx bx-x'></i></button>
+            </div>
+            <p id="qrisTextInfo" style="color: var(--text-muted); font-size: 14px; margin-bottom: 16px; margin-top: 10px;">Memuat informasi...</p>
+            
+            <div style="background: white; padding: 10px; border-radius: 20px; display: inline-block; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); border: 2px solid var(--border); overflow: hidden; line-height: 0;">
+                <div style="width: 280px; height: 280px; overflow: hidden; position: relative; border-radius: 12px;">
+                    <img src="img/qriskas.png" 
+                         alt="QRIS Kas Kelas" 
+                         style="width: 320px; height: 340px; object-fit: cover; position: absolute; top: -20px; left: 50%; transform: translateX(-50%);">
+                </div>
+            </div>
+            
+            <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;">Setelah transfer selesai, <strong>wajib</strong> menekan tombol di bawah ini untuk mengirimkan bukti transfer ke Bendahara.</p>
+            
+            <a href="#" id="btnWaKonfirmasi" target="_blank" class="btn btn-primary" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; background: #25D366; border: none; font-size: 14px; padding: 12px;">
+                <i class='bx bxl-whatsapp' style="font-size: 22px;"></i> Konfirmasi ke WA Bendahara
+            </a>
+        </div> 
+    </div> 
+
+    <div id="addExpenseModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header" style="border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 16px;">
+                <h3><i class='bx bx-money-withdraw' style="color: #f43f5e;"></i> Catat Pengeluaran</h3>
+                <button class="close-modal" onclick="closeAddExpenseModal()"><i class='bx bx-x'></i></button>
+            </div>
+            
+            <form id="addExpenseForm">
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label style="display: block; font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Jenis Pengeluaran / Barang <span style="color: #f43f5e;">*</span></label>
+                    <input type="text" id="expJenis" class="form-control" required placeholder="Contoh: Beli Spidol & Penghapus" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-main);">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label style="display: block; font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Penanggung Jawab (PIC) <span style="color: #f43f5e;">*</span></label>
+                    <input type="text" id="expPIC" class="form-control" required placeholder="Contoh: Budi" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-main);">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 24px;">
+                    <label style="display: block; font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Total Pengeluaran (Rp) <span style="color: #f43f5e;">*</span></label>
+                    <input type="number" id="expTotal" class="form-control" required placeholder="Contoh: 50000" min="1000" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-main);">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; background: #f43f5e; border: none; padding: 12px; font-size: 14px;"><i class='bx bx-save'></i> Simpan Pengeluaran</button>
+            </form>
+        </div> 
+    </div>
+    
+    <div id="addTugasModal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header" style="border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 16px;">
+                <h3><i class='bx bx-task' style="color: #f59e0b;"></i> Tambah Tugas Baru</h3>
+                <button class="close-modal" onclick="closeAddTugasModal()"><i class='bx bx-x'></i></button>
+            </div>
+            
+            <form id="addTugasForm">
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label style="display: block; font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Judul Tugas <span style="color: #f43f5e;">*</span></label>
+                    <input type="text" id="tugasTitle" class="form-control" placeholder="Contoh: Laporan Praktikum 1" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-main);">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div class="form-group">
+                        <label style="display: block; font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Jenis Tugas <span style="color: #f43f5e;">*</span></label>
+                        <select id="tugasJenis" class="form-control" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-main);">
+                            <option value="Individu">Individu</option>
+                            <option value="Kelompok">Kelompok</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label style="display: block; font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Bentuk File <span style="color: #f43f5e;">*</span></label>
+                        <select id="tugasBentuk" class="form-control" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-main);">
+                            <option value="Softfile">Softfile</option>
+                            <option value="Hardfile (Print)">Hardfile (Print)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div class="form-group">
+                        <label style="display: block; font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Pengerjaan <span style="color: #f43f5e;">*</span></label>
+                        <select id="tugasPengerjaan" class="form-control" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-main);">
+                            <option value="Diketik">Diketik</option>
+                            <option value="Tulis Tangan">Tulis Tangan</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label style="display: block; font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Format <span style="color: #f43f5e;">*</span></label>
+                        <select id="tugasFormat" class="form-control" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-main);">
+                            <option value="PDF">PDF</option>
+                            <option value="Word (DOCX)">Word (DOCX)</option>
+                            <option value="PPT">PowerPoint (PPT)</option>
+                            <option value="Kertas F4 / Folio">Kertas F4 / Folio</option>
+                            <option value="Kertas A4">Kertas A4</option>
+                            <option value="Bebas">Bebas</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                    <div class="form-group">
+                        <label style="display: block; font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Kumpulkan Di <span style="color: #f43f5e;">*</span></label>
+                        <select id="tugasKumpul" class="form-control" style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-main);">
+                            <option value="Ethol">Ethol</option>
+                            <option value="Google Classroom">Google Classroom</option>
+                            <option value="Google Drive">Google Drive</option>
+                            <option value="Meja PJ Kelas">PJ Kelas</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label style="display: block; font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Batas Waktu (Deadline) <span style="color: #f43f5e;">*</span></label>
+                        <input type="datetime-local" id="tugasDeadline" class="form-control" required style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-main);">
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 24px;">
+                    <label style="display: block; font-size: 13px; font-weight: 700; color: var(--text-main); margin-bottom: 8px;">Deskripsi (Opsional)</label>
+                    <textarea id="tugasDesc" class="form-control" rows="2" placeholder="Tuliskan catatan tambahan jika ada..." style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-main); font-family: inherit;"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; background: #f59e0b; border: none; padding: 12px; font-size: 14px;"><i class='bx bx-save'></i> Terbitkan Tugas</button>
+            </form>
+            
+        </div> 
+    </div> 
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
