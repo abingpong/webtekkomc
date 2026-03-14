@@ -900,7 +900,13 @@ let canEdit = (roleSekarang === 'admin' || roleSekarang === 'bendahara');
         tbody.innerHTML += `<tr style="transition: background 0.2s;" onmouseover="this.style.backgroundColor='var(--surface-hover)'" onmouseout="this.style.backgroundColor='transparent'"><td style="padding: 14px 16px; text-align: left; position: sticky; left: 0; background: var(--surface); z-index: 1; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); box-shadow: 2px 0 5px rgba(0,0,0,0.02);"><div style="font-weight: 700; color: var(--text-main); font-size: 13px; margin-bottom: 4px;">${anggota.nama}</div><div style="font-size: 11px; font-weight: 600; color: var(--text-muted); padding: 2px 6px; background: var(--bg-color); display: inline-block; border-radius: 4px; border: 1px solid var(--border);">${nrp}</div></td>${cellHTML}<td style="padding: 12px 16px; font-weight: 800; color: #10b981; border-bottom: 1px solid var(--border); border-left: 1px solid var(--border); background: var(--surface);">${lunas} Kali</td><td style="padding: 12px 16px; font-weight: 800; color: #f43f5e; border-bottom: 1px solid var(--border); background: var(--surface);">${nunggak} Kali</td></tr>`;
     });
 };
-
+function normalizeNama(nama){
+return nama
+.toLowerCase()
+.replace(/\./g,'')
+.replace(/\s+/g,' ')
+.trim();
+}
 window.renderKasAnda = () => {
     const elNama = document.getElementById('kas-anda-nama');
     if (!elNama) return;
@@ -913,7 +919,9 @@ window.renderKasAnda = () => {
     if (!namaSekarang || namaSekarang === 'Tamu') { elNama.innerText = "Silakan Logout dan Login ulang dengan NRP Anda."; return; }
 
     elNama.innerText = namaSekarang;
-    const myData = dataKasMingguan.find(siswa => siswa.nama === nrpSekarang);
+const myData = dataKasMingguan.find(siswa =>
+normalizeNama(siswa.nama) === normalizeNama(namaSekarang)
+);
 
     if (myData) {
         let lunas = 0, nunggak = 0, mingguAktif = 0;
