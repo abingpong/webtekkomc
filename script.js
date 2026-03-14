@@ -1595,157 +1595,41 @@ window.balasFeedback = async (id) => {
     }
 };
 
-/* ===================================
-   COVER GENERATOR
-=================================== */
+function updateCoverPreview(){
 
-let coverCanvas;
-let coverCtx;
-let coverTemplate;
+const judul = document.getElementById("cv_judul").value
+const nama = document.getElementById("cv_nama").value
+const nrp = document.getElementById("cv_nrp").value
+const tanggal = document.getElementById("cv_tanggal").value
 
-/* inisialisasi */
-
-function initCover(){
-
-coverCanvas = document.getElementById("coverCanvas");
-
-if(!coverCanvas) return;
-
-coverCtx = coverCanvas.getContext("2d");
-
-coverTemplate = new Image();
-coverTemplate.src = "img/cover-template.png";
-
-coverTemplate.onload = function(){
-
-coverCtx.drawImage(
-coverTemplate,
-0,
-0,
-coverCanvas.width,
-coverCanvas.height
-);
-
-};
+document.getElementById("cv_judul_preview").innerText = judul
+document.getElementById("cv_nama_preview").innerText = nama
+document.getElementById("cv_nrp_preview").innerText = nrp
+document.getElementById("cv_tanggal_preview").innerText = tanggal
 
 }
 
-document.addEventListener("DOMContentLoaded", initCover);
-
-/* ================================
-   MULTI LINE TITLE
-================================ */
-
-function drawTitle(text,x,y,maxWidth){
-
-coverCtx.textAlign="center";
-coverCtx.fillStyle="#000";
-
-let words = text.split(" ");
-let lines=[];
-let line="";
-
-coverCtx.font="700 42px Poppins";
-
-for(let word of words){
-
-let test=line+word+" ";
-
-if(coverCtx.measureText(test).width>maxWidth){
-
-lines.push(line);
-line=word+" ";
-
-}else{
-
-line=test;
-
-}
-
-}
-
-lines.push(line);
-
-lines.forEach((l,i)=>{
-
-coverCtx.fillText(
-l.trim(),
-x,
-y+(i*48)
-);
-
-});
-
-}
-
-/* ================================
-   GENERATE COVER
-================================ */
-
-function generateCover(){
-
-if(!coverCanvas || !coverCtx) return;
-
-coverCtx.clearRect(
-0,
-0,
-coverCanvas.width,
-coverCanvas.height
-);
-
-coverCtx.drawImage(
-coverTemplate,
-0,
-0,
-coverCanvas.width,
-coverCanvas.height
-);
-
-const judul = document.getElementById("cv_judul").value;
-const nama = document.getElementById("cv_nama").value;
-const nrp = document.getElementById("cv_nrp").value;
-const kelas = document.getElementById("cv_kelas").value;
-const matkul = document.getElementById("cv_matkul").value;
-const dosen = document.getElementById("cv_dosen").value;
-const aslab = document.getElementById("cv_aslab").value;
-const hari = document.getElementById("cv_hari").value;
-const tanggal = document.getElementById("cv_tanggal").value;
-
-drawTitle(
-judul,
-coverCanvas.width/2,
-340,
-820
-);
-
-coverCtx.textAlign="left";
-coverCtx.font="600 28px Poppins";
-
-coverCtx.fillText(nama,520,1110);
-coverCtx.fillText(nrp,520,1160);
-coverCtx.fillText(kelas,520,1210);
-coverCtx.fillText(matkul,520,1260);
-coverCtx.fillText(dosen,520,1310);
-coverCtx.fillText(aslab,520,1360);
-coverCtx.fillText(hari,520,1410);
-coverCtx.fillText(tanggal,520,1460);
-
-}
-
-/* ================================
-   DOWNLOAD COVER
-================================ */
+document.querySelectorAll("#cover input")
+.forEach(el=>{
+el.addEventListener("input",updateCoverPreview)
+})
 
 function downloadCover(){
 
-if(!coverCanvas) return;
+const cover = document.getElementById("coverArea")
 
-const link=document.createElement("a");
+html2canvas(cover,{
+scale:3
+}).then(canvas=>{
 
-link.download="cover-praktikum.png";
+const link=document.createElement("a")
 
-link.href=coverCanvas.toDataURL("image/png");
+link.download="cover-praktikum.png"
 
-link.click();
+link.href=canvas.toDataURL()
+
+link.click()
+
+})
 
 }

@@ -470,23 +470,23 @@ if(!token){
 
                 </div>
 
-                <!-- PREVIEW -->
+                <div class="cover-preview">
 
-                <div class="card-box">
+                <div id="coverArea" class="cover-area">
 
-                <canvas
-                id="coverCanvas"
-                width="1240"
-                height="1754"
-                style="
-                width:420px;
-                max-width:100%;
-                border-radius:12px;
-                display:block;
-                margin:auto;
-                box-shadow:0 10px 30px rgba(0,0,0,0.15);
-                ">
-                </canvas>
+                <img src="img/cover-template.png" class="cover-bg">
+
+                <div id="cv_judul_preview" class="cv-judul"></div>
+
+                <div class="cv-data">
+
+                <div><span>NAMA</span><b id="cv_nama_preview"></b></div>
+                <div><span>NRP</span><b id="cv_nrp_preview"></b></div>
+                <div><span>TANGGAL</span><b id="cv_tanggal_preview"></b></div>
+
+                </div>
+
+                </div>
 
                 </div>
 
@@ -862,6 +862,7 @@ if(!token){
         </div> 
     </div> 
 
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script type="module" src="script.js"></script>
 </body>
 </html>
