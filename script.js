@@ -1596,37 +1596,30 @@ window.balasFeedback = async (id) => {
 };
 
 // ==========================================
-// 12. LOGIKA GENERATOR COVER PRAKTIKUM (FULL)
+// 12. LOGIKA GENERATOR COVER PRAKTIKUM (FINAL BUGFIX)
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-    // Definisi Elemen DOM
+    let modeSekarang = 'individu';
+
     const btnIndividu = document.getElementById('btnModeIndividu');
     const btnKelompok = document.getElementById('btnModeKelompok');
-    
     const formIndividu = document.getElementById('formIndividuOnly');
     const formKelompok = document.getElementById('formKelompokOnly');
-    
     const prevIndividuNama = document.getElementById('rowPrevNamaIndividu');
     const prevIndividuNrp = document.getElementById('rowPrevNrpIndividu');
     const prevKelompok = document.getElementById('rowPrevKelompok');
-    
     const listAnggota = document.getElementById('listAnggotaKelompok');
     const btnTambah = document.getElementById('btnTambahAnggota');
-    const imgTemplate = document.getElementById('imgTemplate'); // Elemen Gambar Template
+    const imgTemplate = document.getElementById('imgTemplate');
 
-    // Pemetaan Input Dasar
     const coverMapping = {
-        'covJenisLaporan': 'prevJenisLaporan',
-        'covJudul': 'prevJudul',
-        'covKelas': 'prevKelas',
-        'covMatkul': 'prevMatkul',
-        'covDosen': 'prevDosen',
-        'covAsisten': 'prevAsisten',
-        'covHari': 'prevHari',
-        'covTgl': 'prevTgl'
+        'covJenisLaporan': 'prevJenisLaporan', 'covJudul': 'prevJudul',
+        'covKelas': 'prevKelas', 'covMatkul': 'prevMatkul',
+        'covDosen': 'prevDosen', 'covAsisten': 'prevAsisten',
+        'covHari': 'prevHari', 'covTgl': 'prevTgl'
     };
 
-    // Fungsi Auto Resize Font Pintar
+    // --- FUNGSI AUTO RESIZE UMUM ---
     function adjustFontSize(element, defaultSize, minSize) {
         element.style.fontSize = defaultSize + 'px';
         let currentSize = defaultSize;
@@ -1636,210 +1629,159 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Pasang Event Listener Input Dasar
-    for (const [inputId, prevId] of Object.entries(coverMapping)) {
-        const inputEl = document.getElementById(inputId);
-        const prevEl = document.getElementById(prevId);
-
-        if (inputEl && prevEl) {
-            const fallbackText = prevEl.innerText; 
-            const eventType = inputEl.tagName === 'SELECT' ? 'change' : 'input';
-            
-            let ukuranDefault = 16; 
-            if (inputId === 'covJudul') ukuranDefault = 16;
-            if (inputId === 'covJenisLaporan') ukuranDefault = 28;
-
-            inputEl.addEventListener(eventType, (e) => {
-                let text = e.target.value.trim();
-                prevEl.innerText = text || fallbackText;
-                adjustFontSize(prevEl, ukuranDefault, 9);
-            });
-        }
-    }
-
-    // Event Khusus Form Individu
-    const inputNamaIndividu = document.getElementById('covNama');
-    const inputNrpIndividu = document.getElementById('covNrp');
-    const prevNamaIndividu = document.getElementById('prevNama');
-    const prevNrpIndividu = document.getElementById('prevNrp');
-
-    if (inputNamaIndividu) inputNamaIndividu.addEventListener('input', (e) => {
-        prevNamaIndividu.innerText = e.target.value || 'Nama Mahasiswa';
-        adjustFontSize(prevNamaIndividu, 16, 9);
-    });
-    
-    if (inputNrpIndividu) inputNrpIndividu.addEventListener('input', (e) => {
-        prevNrpIndividu.innerText = e.target.value || '1234567890';
-        adjustFontSize(prevNrpIndividu, 16, 9);
-    });
-
-    // --- 1. Fungsi Ganti Mode (Tombol Diklik) ---
-    if (btnIndividu && btnKelompok) {
-        btnIndividu.addEventListener('click', () => {
-            btnIndividu.className = 'btn btn-primary';
-            btnKelompok.className = 'btn btn-outline';
-            btnKelompok.style.border = 'none';
-            
-            formIndividu.style.display = 'block';
-            formKelompok.style.display = 'none';
-            prevIndividuNama.style.display = 'flex';
-            prevIndividuNrp.style.display = 'flex';
-            prevKelompok.style.display = 'none';
-
-            // Ganti Gambar ke Individu
-            if (imgTemplate) imgTemplate.src = 'img/cover-template.png';
-        });
-
-        btnKelompok.addEventListener('click', () => {
-            btnKelompok.className = 'btn btn-primary';
-            btnIndividu.className = 'btn btn-outline';
-            btnIndividu.style.border = 'none';
-            
-            formIndividu.style.display = 'none';
-            formKelompok.style.display = 'block';
-            prevIndividuNama.style.display = 'none';
-            prevIndividuNrp.style.display = 'none';
-            prevKelompok.style.display = 'flex';
-            
-            // Ganti Gambar ke Kelompok
-            if (imgTemplate) imgTemplate.src = 'img/cover-kelompok.png';
-            
-            if (listAnggota.children.length === 0) tambahBarisAnggota();
-        });
-    }
-
-// --- 2. Fungsi Resize Font Khusus Kelompok (DIPERBAIKI) ---
-    // Membandingkan ukuran <span> (teks) dengan <div> (wadahnya)
+    // --- FUNGSI AUTO RESIZE KELOMPOK (BACA LEBAR SPAN) ---
     function adjustFontSizeKelompok(wadahEl, spanEl, defaultSize, minSize) {
         spanEl.style.fontSize = defaultSize + 'px';
         let currentSize = defaultSize;
-        
-        // Pengecekan aman agar tidak eror jika kotak disembunyikan
         if (wadahEl.clientWidth === 0) return; 
-
-        // Selama teks lebih panjang dari wadahnya, kecilkan!
         while (spanEl.offsetWidth > wadahEl.clientWidth && currentSize > minSize) {
             currentSize -= 0.5;
             spanEl.style.fontSize = currentSize + 'px';
         }
     }
 
-    // --- 3. Fungsi Cetak ke Kertas Preview Kelompok (DIPERBAIKI) ---
-    function renderPreviewKelompok() {
-        const prevKelompok = document.getElementById('rowPrevKelompok');
-        const listAnggota = document.getElementById('listAnggotaKelompok');
-        if (!prevKelompok || !listAnggota) return;
+    // --- EVENT LISTENER INPUT DASAR ---
+    for (const [inputId, prevId] of Object.entries(coverMapping)) {
+        const inputEl = document.getElementById(inputId);
+        const prevEl = document.getElementById(prevId);
+        if (inputEl && prevEl) {
+            const fallbackText = prevEl.innerText; 
+            const eventType = inputEl.tagName === 'SELECT' ? 'change' : 'input';
+            
+            let ukuranDefault = 15; 
+            if (inputId === 'covJudul') ukuranDefault = 16;
+            if (inputId === 'covJenisLaporan') ukuranDefault = 28;
 
-        prevKelompok.innerHTML = ''; // Bersihkan dulu
+            inputEl.addEventListener(eventType, (e) => {
+                prevEl.innerText = e.target.value.trim() || fallbackText;
+                adjustFontSize(prevEl, ukuranDefault, 9);
+            });
+        }
+    }
+
+    // --- EVENT INPUT INDIVIDU ---
+    document.getElementById('covNama')?.addEventListener('input', (e) => {
+        const el = document.getElementById('prevNama');
+        el.innerText = e.target.value.trim() || 'Nama Mahasiswa';
+        adjustFontSize(el, 15, 9);
+    });
+    document.getElementById('covNrp')?.addEventListener('input', (e) => {
+        const el = document.getElementById('prevNrp');
+        el.innerText = e.target.value.trim() || '1234567890';
+        adjustFontSize(el, 15, 9);
+    });
+
+    // --- RENDER PREVIEW KELOMPOK ---
+    function renderPreviewKelompok() {
+        if (!prevKelompok || !listAnggota) return;
+        prevKelompok.innerHTML = ''; 
         
         const barisanForm = listAnggota.querySelectorAll('.kel-row');
-        
         barisanForm.forEach((row, index) => {
-            const inputNama = row.querySelector('.kel-nama');
-            const inputNrp = row.querySelector('.kel-nrp');
-            
-            const nama = inputNama ? inputNama.value.trim() || 'Nama Anggota' : 'Nama Anggota';
-            const nrp = inputNrp ? inputNrp.value.trim() || 'NRP' : 'NRP';
-            
+            const nama = row.querySelector('.kel-nama').value.trim() || 'Nama Anggota';
+            const nrp = row.querySelector('.kel-nrp').value.trim() || 'NRP';
             const labelText = index === 0 ? 'NAMA' : '';
             
             const divRow = document.createElement('div');
             divRow.className = 'detail-flex-row group-row'; 
-            
-            // Perhatikan elemen <span class="resize-text"> yang membungkus teks
             divRow.innerHTML = `
-                <div class="lbl">${labelText}</div>
-                <div class="titik">:</div>
+                <div class="lbl">${labelText}</div><div class="titik">:</div>
                 <div class="val">
                     <div class="member-name"><span class="resize-text">${nama}</span></div>
                     <div class="separator">/</div>
                     <div class="member-nrp"><span class="resize-text">${nrp}</span></div>
-                </div>
-            `;
+                </div>`;
             
             prevKelompok.appendChild(divRow);
             
-            // Panggil fungsi Auto-Resize yang sudah cerdas
             const wadahNama = divRow.querySelector('.member-name');
-            const spanNama = wadahNama.querySelector('.resize-text');
+            const spanNama = divRow.querySelector('.member-name .resize-text');
             const wadahNrp = divRow.querySelector('.member-nrp');
-            const spanNrp = wadahNrp.querySelector('.resize-text');
+            const spanNrp = divRow.querySelector('.member-nrp .resize-text');
             
-            if (typeof adjustFontSizeKelompok === "function") {
-                adjustFontSizeKelompok(wadahNama, spanNama, 16, 9); 
-                adjustFontSizeKelompok(wadahNrp, spanNrp, 16, 9); 
-            }
+            adjustFontSizeKelompok(wadahNama, spanNama, 15, 9); 
+            adjustFontSizeKelompok(wadahNrp, spanNrp, 15, 9); 
         });
     }
-// ... (Bagian Tambah Baris Anggota, Toggle Mode, dst.) ...
 
-    // --- 3. Fungsi Tambah Baris Input Kelompok ---
+    // --- TAMBAH ANGGOTA KELOMPOK ---
     function tambahBarisAnggota() {
         const row = document.createElement('div');
         row.className = 'kel-row';
-        row.style.display = 'flex';
-        row.style.gap = '8px';
-        
+        row.style.display = 'flex'; row.style.gap = '8px';
         row.innerHTML = `
             <input type="text" class="form-control kel-nama" placeholder="Nama" style="flex: 1; padding: 10px;">
             <input type="text" class="form-control kel-nrp" placeholder="NRP" style="width: 100px; padding: 10px;">
             <button type="button" class="btn btn-outline btn-hapus-kel" style="padding: 10px; color: #f43f5e; border-color: #f43f5e;">
                 <i class='bx bx-trash'></i>
-            </button>
-        `;
+            </button>`;
         
         row.querySelector('.kel-nama').addEventListener('input', renderPreviewKelompok);
         row.querySelector('.kel-nrp').addEventListener('input', renderPreviewKelompok);
-        
         row.querySelector('.btn-hapus-kel').addEventListener('click', () => {
-            row.remove();
-            renderPreviewKelompok(); 
+            row.remove(); renderPreviewKelompok(); 
         });
         
         listAnggota.appendChild(row);
         renderPreviewKelompok();
     }
-
     if (btnTambah) btnTambah.addEventListener('click', tambahBarisAnggota);
 
-    // --- 4. Fungsi Download Kertas (Sempurna) ---
-    const btnDownload = document.getElementById('btnDownloadCover');
-    const areaKertas = document.getElementById('kertasPreview');
+    // --- TOGGLE MODE INDIVIDU / KELOMPOK ---
+    if (btnIndividu && btnKelompok) {
+        btnIndividu.addEventListener('click', () => {
+            modeSekarang = 'individu';
+            btnIndividu.className = 'btn btn-primary'; btnKelompok.className = 'btn btn-outline'; btnKelompok.style.border = 'none';
+            
+            formIndividu.style.display = 'block'; formKelompok.style.display = 'none';
+            prevIndividuNama.style.display = 'flex'; prevIndividuNrp.style.display = 'flex';
+            prevKelompok.style.display = 'none';
+            
+            if (imgTemplate) imgTemplate.src = 'img/Cover TugasPraktikum.jpg';
+        });
 
-    if (btnDownload && areaKertas) {
+        btnKelompok.addEventListener('click', () => {
+            modeSekarang = 'kelompok';
+            btnKelompok.className = 'btn btn-primary'; btnIndividu.className = 'btn btn-outline'; btnIndividu.style.border = 'none';
+            
+            formIndividu.style.display = 'none'; formKelompok.style.display = 'block';
+            prevIndividuNama.style.display = 'none'; prevIndividuNrp.style.display = 'none';
+            prevKelompok.style.display = 'flex';
+            
+            if (imgTemplate) imgTemplate.src = 'img/COVER KELOMPOK.png';
+            if (listAnggota.children.length === 0) tambahBarisAnggota();
+            
+            // Timeout kecil agar DOM selesai merender display:flex sebelum kalkulasi width
+            setTimeout(renderPreviewKelompok, 50); 
+        });
+    }
+
+    // --- DOWNLOAD ---
+    const btnDownload = document.getElementById('btnDownloadCover');
+    if (btnDownload) {
         btnDownload.addEventListener('click', async () => {
             const originalText = btnDownload.innerHTML;
             btnDownload.innerHTML = `<i class='bx bx-loader-alt bx-spin'></i> Memproses...`;
             btnDownload.disabled = true;
 
             try {
-                const canvas = await html2canvas(areaKertas, {
-                    scale: 2, 
-                    useCORS: true,
-                    backgroundColor: "#ffffff",
-                    logging: false
+                const canvas = await html2canvas(document.getElementById('kertasPreview'), {
+                    scale: 2, useCORS: true, backgroundColor: "#ffffff", logging: false
                 });
 
                 const imageData = canvas.toDataURL("image/jpeg", 1.0);
-                
                 const kegiatan = document.getElementById('covJenisLaporan').value || 'TUGAS';
                 const matkul = document.getElementById('covMatkul').value || 'Kuliah';
-                let mode = btnKelompok.classList.contains('btn-primary') ? 'Kelompok' : 'Individu';
-                let penanda = mode === 'Individu' ? (document.getElementById('covNama').value || 'Mahasiswa') : 'Kelompok';
+                let penanda = modeSekarang === 'individu' ? (document.getElementById('covNama').value || 'Mahasiswa') : 'Kelompok';
                 
-                const link = document.createElement("a");
-                link.href = imageData;
-                link.download = `Cover_${mode}_${kegiatan}_${matkul.replace(/\s+/g, '_')}_${penanda.replace(/\s+/g, '_')}.jpg`;
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                
+                const link = document.createElement("a"); link.href = imageData;
+                link.download = `Cover_${modeSekarang}_${kegiatan}_${matkul.replace(/\s+/g, '_')}_${penanda.replace(/\s+/g, '_')}.jpg`;
+                document.body.appendChild(link); link.click(); document.body.removeChild(link);
             } catch (error) {
                 console.error("Gagal mendownload cover:", error);
                 alert("Maaf, terjadi kesalahan saat memproses gambar.");
             } finally {
-                btnDownload.innerHTML = originalText;
-                btnDownload.disabled = false;
+                btnDownload.innerHTML = originalText; btnDownload.disabled = false;
             }
         });
     }

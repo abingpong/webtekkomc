@@ -381,149 +381,56 @@ right:auto;
 }
 
 /* ==========================================
-   STYLING CANVAS COVER TUGAS
+   STYLING CANVAS COVER TUGAS (FINAL)
 ========================================== */
-.cover-layout {
-    transition: all 0.3s ease;
-}
+.cover-layout { transition: all 0.3s ease; }
+@media (max-width: 992px) { .cover-layout { grid-template-columns: 1fr !important; } }
 
-@media (max-width: 992px) {
-    .cover-layout {
-        grid-template-columns: 1fr !important;
-    }
-}
-
-/* Kertas A4 Standar Web (96 DPI) */
 .kertas-a4 {
-    width: 794px;
-    height: 1123px;
-    background: white;
-    position: relative;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-    transform-origin: top center;
-    transform: scale(0.8); 
-    margin-bottom: -220px; 
-    
-    /* GANTI FONT DI SINI */
+    width: 794px; height: 1123px; background: white; position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15); transform-origin: top center;
+    transform: scale(0.8); margin-bottom: -220px; 
     font-family: 'Montserrat', sans-serif; 
 }
+.kertas-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain; z-index: 1; }
+.text-overlay { position: absolute; z-index: 2; color: #1a202c; }
 
-.kertas-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    z-index: 1;
-}
-
-.text-overlay {
-    position: absolute;
-    z-index: 2;
-    color: #1a202c; /* Warna teks gelap tegas */
-}
-
-/* Kotak Judul Atas (Flexbox Vertikal) */
+/* KOTAK JUDUL ATAS */
 .title-box {
-    top: 17.5%; /* Atur % ini jika teks kurang ke atas/bawah */
-    left: 26%;  /* Atur % ini jika teks kurang ke kiri/kanan */
-    width: 48%;
-    height: 8%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+    top: 17.5%; left: 26%; width: 48%; height: 8%;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+}
+.title-main { font-size: 28px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; line-height: 1.1; color: #0f172a; }
+.title-sub { font-size: 16px; font-weight: 700; text-transform: uppercase; margin-top: 4px; line-height: 1.2; color: #334155; }
+
+/* KOTAK DETAIL BAWAH (POSISI UTAMA) */
+.detail-box {
+    top: 64.8%; left: 27%; width: 46%;
+    display: flex; flex-direction: column;
+    gap: 7px 0; /* Jarak antar baris */
 }
 
-.title-main {
-    font-size: 28px;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    line-height: 1.1;
-    color: #0f172a; 
-}
-
-.title-sub {
-    font-size: 16px;
-    font-weight: 700;
-    text-transform: uppercase;
-    margin-top: 4px;
-    line-height: 1.2;
-    color: #334155; 
-}
-
-/* ==========================================
-   1. PENGATURAN INDIVIDU (KEMBALI SEPERTI SEMULA)
-========================================== */
+/* BARIS STANDAR & INDIVIDU */
 .detail-flex-row {
-    display: flex;
-    align-items: center; 
-    width: 100%;
-    font-weight: 700;
-    text-transform: uppercase;
-    font-size: 15px; /* Standar individu */
-    gap: 7px 0;
+    display: flex; align-items: center; width: 100%; font-weight: 700;
+    text-transform: uppercase; font-size: 15px; 
 }
-.detail-flex-row .lbl {
-    font-weight: 800;
-    width: 140px;
-    flex-shrink: 0;
-}
-.detail-flex-row .titik {
-    width: 15px;
-    text-align: center;
-    flex-shrink: 0;
-}
-.detail-flex-row .val {
-    flex: 1;
-    min-width: 0;
-    white-space: nowrap;
-    overflow: hidden;
-    text-align: left;
-}
+.detail-flex-row .lbl { font-weight: 800; width: 140px; flex-shrink: 0; }
+.detail-flex-row .titik { width: 15px; text-align: center; flex-shrink: 0; }
+.detail-flex-row .val { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-align: left; }
 
-/* ==========================================
-   2. PENGATURAN KHUSUS KELOMPOK (DIISOLASI)
-========================================== */
+/* BARIS KHUSUS KELOMPOK */
 #rowPrevKelompok {
-    display: flex !important;
-    flex-direction: column !important;
-    width: 100%;
-    gap: 5px 0; 
-}
-.detail-flex-row.group-row {
-    font-size: 16px; /* Ukuran khusus kelompok */
-    gap: 0;
+    display: flex !important; flex-direction: column !important;
+    width: 100%; gap: 5px 0; 
 }
 .detail-flex-row.group-row .val {
-    display: flex;
-    justify-content: space-between; /* Pisah ke ujung Kiri dan Kanan */
-    align-items: center;
-    padding-left: 0 !important;  /* Mentok ke kiri (nempel titik dua) */
-    padding-right: 0 !important; /* Mentok ke kanan (nempel batas kotak) */
-    overflow: visible; 
+    display: flex; justify-content: space-between; align-items: center;
+    padding-left: 0 !important; padding-right: 0 !important; overflow: visible; 
 }
-.group-row .member-name {
-    flex: 1;
-    text-align: left;
-    overflow: hidden; 
-}
-.group-row .separator {
-    width: 20px; /* Lebar garis miring pembatas */
-    text-align: center;
-    font-weight: 800;
-}
-.group-row .member-nrp {
-    width: 90px; /* Lebar area NRP */
-    text-align: right;
-    overflow: hidden;
-    flex-shrink: 0;
-}
-/* Kunci perbaikan teks menghilang: Span khusus untuk dibaca JS */
-.resize-text {
-    white-space: nowrap;
-    display: inline-block;
-}
+.group-row .member-name { flex: 1; text-align: left; overflow: hidden; }
+.group-row .separator { width: 20px; text-align: center; font-weight: 800; }
+.group-row .member-nrp { width: 100px; text-align: right; overflow: hidden; flex-shrink: 0; }
+
+/* WADAH RESIZE FONT */
+.resize-text { white-space: nowrap; display: inline-block; }
