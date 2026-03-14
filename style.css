@@ -405,7 +405,7 @@ right:auto;
 
 /* KOTAK DETAIL BAWAH (POSISI ASLI UNTUK INDIVIDU) */
 .detail-box {
-    top: 64.8%; 
+    top: 65%; 
     left: 27%; /* Posisi asli individu */
     width: 46%; /* Lebar asli individu */
     display: flex; 
@@ -417,8 +417,8 @@ right:auto;
 /* KOTAK DETAIL BAWAH (KHUSUS KELOMPOK - LEBIH KIRI & LEBAR) */
 /* Class ini akan dipasang dan dicopot otomatis oleh JavaScript */
 .detail-box.mode-kelompok-aktif {
-    left: 18%; /* Lebih mepet ke kiri */
-    width: 64%; /* Jauh lebih lebar ke kanan */
+    left: 22%; /* Lebih mepet ke kiri */
+    width: 60%; /* Jauh lebih lebar ke kanan */
 }
 
 /* KEMBALIKAN LABEL AGAR SEMUA TITIK DUA SEJAJAR LURUS */
