@@ -410,7 +410,7 @@ right:auto;
     width: 46%; /* Lebar asli individu */
     display: flex; 
     flex-direction: column;
-    gap: 5px 0; 
+    gap: 5.2px 0; 
     transition: all 0.3s ease; /* Efek transisi mulus saat ganti cover */
 }
 
@@ -418,7 +418,7 @@ right:auto;
 /* Class ini akan dipasang dan dicopot otomatis oleh JavaScript */
 .detail-box.mode-kelompok-aktif {
     left: 22%; /* Lebih mepet ke kiri */
-    width: 60%; /* Jauh lebih lebar ke kanan */
+    width: 55%; /* Jauh lebih lebar ke kanan */
 }
 
 /* KEMBALIKAN LABEL AGAR SEMUA TITIK DUA SEJAJAR LURUS */
