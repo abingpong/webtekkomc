@@ -494,48 +494,50 @@ if(!token){
                     </button>
                 </div>
 
-                <div class="card-box" style="margin-bottom: 0; background: #e2e8f0; display: flex; justify-content: center; overflow-x: auto; padding: 40px 20px;">
-                    <div id="kertasPreview" class="kertas-a4">
-                        <img id="imgTemplate" src="img/cover-template.png" class="kertas-bg" alt="Template">
-                        
-                        <div class="text-overlay title-box">
-                            <div id="prevJenisLaporan" class="title-main">PRAKTIKUM</div>
-                            <div id="prevJudul" class="title-sub">PEMROGRAMAN WEB</div>
+                <div id="kertasContainer" class="card-box" style="margin-bottom: 0; background: #e2e8f0; display: flex; justify-content: center; padding: 40px 20px;">
+            
+            <div id="scaleWrapper" style="transform-origin: top center;">
+                
+                <div id="kertasPreview" class="kertas-a4">
+                    <img id="imgTemplate" src="img/cover-template.png" class="kertas-bg" alt="Template">
+                    
+                    <div class="text-overlay title-box">
+                        <div id="prevJenisLaporan" class="title-main">PRAKTIKUM</div>
+                        <div id="prevJudul" class="title-sub">PEMROGRAMAN WEB</div>
+                    </div>
+
+                    <div class="text-overlay detail-box">
+                        <div class="detail-flex-row" id="rowPrevNamaIndividu">
+                            <div class="lbl">NAMA</div><div class="titik">:</div><div class="val" id="prevNama">Nama Mahasiswa</div>
+                        </div>
+                        <div class="detail-flex-row" id="rowPrevNrpIndividu">
+                            <div class="lbl">NRP</div><div class="titik">:</div><div class="val" id="prevNrp">1234567890</div>
                         </div>
 
-                        <div class="text-overlay detail-box">
-                            <div class="detail-flex-row" id="rowPrevNamaIndividu">
-                                <div class="lbl">NAMA</div><div class="titik">:</div><div class="val" id="prevNama">Nama Mahasiswa</div>
-                            </div>
-                            <div class="detail-flex-row" id="rowPrevNrpIndividu">
-                                <div class="lbl">NRP</div><div class="titik">:</div><div class="val" id="prevNrp">1234567890</div>
-                            </div>
+                        <div id="rowPrevKelompok" style="display: none; width: 100%; flex-direction: column; gap: 4px 0;">
+                        </div>
 
-                            <div id="rowPrevKelompok" style="display: none; width: 100%; flex-direction: column; gap: 4px 0;">
-                                </div>
-
-                            <div class="detail-flex-row">
-                                <div class="lbl">KELAS</div><div class="titik">:</div><div class="val" id="prevKelas">1 D4 Teknik Komputer C</div>
-                            </div>
-                            <div class="detail-flex-row">
-                                <div class="lbl">MATA KULIAH</div><div class="titik">:</div><div class="val" id="prevMatkul">Mata Kuliah</div>
-                            </div>
-                            <div class="detail-flex-row">
-                                <div class="lbl">DOSEN</div><div class="titik">:</div><div class="val" id="prevDosen">Nama Dosen</div>
-                            </div>
-                            <div class="detail-flex-row">
-                                <div class="lbl">ASISTEN LAB</div><div class="titik">:</div><div class="val" id="prevAsisten">-</div>
-                            </div>
-                            <div class="detail-flex-row">
-                                <div class="lbl">HARI</div><div class="titik">:</div><div class="val" id="prevHari">Hari</div>
-                            </div>
-                            <div class="detail-flex-row">
-                                <div class="lbl">TGL PRAKTIKUM</div><div class="titik">:</div><div class="val" id="prevTgl">Tanggal</div>
-                            </div>
+                        <div class="detail-flex-row">
+                            <div class="lbl">KELAS</div><div class="titik">:</div><div class="val" id="prevKelas">1 D4 Teknik Komputer C</div>
+                        </div>
+                        <div class="detail-flex-row">
+                            <div class="lbl">MATA KULIAH</div><div class="titik">:</div><div class="val" id="prevMatkul">Mata Kuliah</div>
+                        </div>
+                        <div class="detail-flex-row">
+                            <div class="lbl">DOSEN</div><div class="titik">:</div><div class="val" id="prevDosen">Nama Dosen</div>
+                        </div>
+                        <div class="detail-flex-row">
+                            <div class="lbl">ASISTEN LAB</div><div class="titik">:</div><div class="val" id="prevAsisten">-</div>
+                        </div>
+                        <div class="detail-flex-row">
+                            <div class="lbl">HARI</div><div class="titik">:</div><div class="val" id="prevHari">Hari</div>
+                        </div>
+                        <div class="detail-flex-row">
+                            <div class="lbl">TGL PRAKTIKUM</div><div class="titik">:</div><div class="val" id="prevTgl">Tanggal</div>
                         </div>
                     </div>
                 </div>
-                
+            </div>
             </div>
         </div>
         <div id="anggota" class="view-section"><h2 style="margin-bottom:20px;">Anggota Kelas</h2><p class="subtitle">Segera hadir.</p></div>

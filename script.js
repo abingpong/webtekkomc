@@ -1763,6 +1763,34 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // --- FUNGSI RESPONSIVE KERTAS (ANTI GEPENG & ANTI SPACE KOSONG) ---
+    function sesuaikanSkalaKertas() {
+        const container = document.getElementById('kertasContainer');
+        const wrapper = document.getElementById('scaleWrapper');
+        if (!container || !wrapper) return;
+
+        // Hitung lebar layar yang tersedia (dikurangi padding container 40px)
+        let availableWidth = container.clientWidth - 40;
+        
+        // Cari rasio skalanya (794 adalah ukuran asli kertas A4)
+        let scale = availableWidth / 794;
+        
+        // Batasi skala maksimal agar di layar PC/Laptop tidak terlalu raksasa
+        if (scale > 0.8) scale = 0.8; 
+
+        // Terapkan Zoom / Scale ke bungkusnya
+        wrapper.style.transform = `scale(${scale})`;
+        
+        // POTONG SPACE KOSONG SECARA MATEMATIS!
+        wrapper.style.height = `${1123 * scale}px`; 
+    }
+
+    // Jalankan fungsi ini saat pertama kali web dibuka
+    sesuaikanSkalaKertas();
+    
+    // Jalankan lagi otomatis setiap kali layar HP dimiringkan atau browser ditarik
+    window.addEventListener('resize', sesuaikanSkalaKertas);
+
     // --- DOWNLOAD ---
     const btnDownload = document.getElementById('btnDownloadCover');
     if (btnDownload) {
