@@ -458,7 +458,7 @@ right:auto;
 /* === GANTI STYLING DETAIL-BOX LAMA DENGAN INI === */
 /* Kotak Detail Bawah (Tetap di posisi yang sama) */
 .detail-box {
-    top: 66%; /* Atur % ini jika teks detail kurang ke atas/bawah */
+    top: 65%; /* Atur % ini jika teks detail kurang ke atas/bawah */
     left: 27%;
     width: 46%;
     font-family: 'Montserrat', sans-serif; /* Pastikan font elegan */

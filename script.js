@@ -1596,15 +1596,28 @@ window.balasFeedback = async (id) => {
 };
 
 // ==========================================
-// 12. LOGIKA GENERATOR COVER PRAKTIKUM
+// 12. LOGIKA GENERATOR COVER PRAKTIKUM (FULL)
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-    // Pemetaan ID Input form ke ID Text Overlay di Preview
+    // Definisi Elemen DOM
+    const btnIndividu = document.getElementById('btnModeIndividu');
+    const btnKelompok = document.getElementById('btnModeKelompok');
+    
+    const formIndividu = document.getElementById('formIndividuOnly');
+    const formKelompok = document.getElementById('formKelompokOnly');
+    
+    const prevIndividuNama = document.getElementById('rowPrevNamaIndividu');
+    const prevIndividuNrp = document.getElementById('rowPrevNrpIndividu');
+    const prevKelompok = document.getElementById('rowPrevKelompok');
+    
+    const listAnggota = document.getElementById('listAnggotaKelompok');
+    const btnTambah = document.getElementById('btnTambahAnggota');
+    const imgTemplate = document.getElementById('imgTemplate'); // Elemen Gambar Template
+
+    // Pemetaan Input Dasar
     const coverMapping = {
         'covJenisLaporan': 'prevJenisLaporan',
         'covJudul': 'prevJudul',
-        'covNama': 'prevNama',
-        'covNrp': 'prevNrp',
         'covKelas': 'prevKelas',
         'covMatkul': 'prevMatkul',
         'covDosen': 'prevDosen',
@@ -1613,13 +1626,9 @@ document.addEventListener('DOMContentLoaded', () => {
         'covTgl': 'prevTgl'
     };
 
-// FUNGSI AUTO RESIZE FONT
+    // Fungsi Auto Resize Font Pintar
     function adjustFontSize(element, defaultSize, minSize) {
-        // 1. Reset ke ukuran default setiap kali user mengetik ulang
         element.style.fontSize = defaultSize + 'px';
-        
-        // 2. Loop: Selama teks membludak keluar kotak (scrollWidth > clientWidth) 
-        // dan ukuran font masih di atas batas minimal, kecilkan perlahan (0.5px)
         let currentSize = defaultSize;
         while (element.scrollWidth > element.clientWidth && currentSize > minSize) {
             currentSize -= 0.5;
@@ -1627,73 +1636,168 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Pasang Event Listener 'input' ke setiap kolom
+    // Pasang Event Listener Input Dasar
     for (const [inputId, prevId] of Object.entries(coverMapping)) {
         const inputEl = document.getElementById(inputId);
         const prevEl = document.getElementById(prevId);
 
         if (inputEl && prevEl) {
-            // Simpan teks bawaan (placeholder) dari HTML sebagai fallback
             const fallbackText = prevEl.innerText; 
             const eventType = inputEl.tagName === 'SELECT' ? 'change' : 'input';
-
-            // Tentukan ukuran standar berdasarkan elemennya (sesuai CSS)
-            let ukuranDefault = 15; // Ukuran untuk Nama, NRP, Dosen, dll
-            if (inputId === 'covJudul') ukuranDefault = 16;         // Ukuran Sub-Judul
-            if (inputId === 'covJenisLaporan') ukuranDefault = 28;  // Ukuran Judul Utama
+            
+            let ukuranDefault = 16; 
+            if (inputId === 'covJudul') ukuranDefault = 16;
+            if (inputId === 'covJenisLaporan') ukuranDefault = 28;
 
             inputEl.addEventListener(eventType, (e) => {
                 let text = e.target.value.trim();
                 prevEl.innerText = text || fallbackText;
-                
-                // Panggil fungsi auto-resize setiap ada ketikan
-                // (Batas minimal font adalah 9px agar saat diprint tetap bisa dibaca)
                 adjustFontSize(prevEl, ukuranDefault, 9);
             });
         }
     }
 
-    // Fungsi Download Kertas menggunakan html2canvas
+    // Event Khusus Form Individu
+    const inputNamaIndividu = document.getElementById('covNama');
+    const inputNrpIndividu = document.getElementById('covNrp');
+    const prevNamaIndividu = document.getElementById('prevNama');
+    const prevNrpIndividu = document.getElementById('prevNrp');
+
+    if (inputNamaIndividu) inputNamaIndividu.addEventListener('input', (e) => {
+        prevNamaIndividu.innerText = e.target.value || 'Nama Mahasiswa';
+        adjustFontSize(prevNamaIndividu, 16, 9);
+    });
+    
+    if (inputNrpIndividu) inputNrpIndividu.addEventListener('input', (e) => {
+        prevNrpIndividu.innerText = e.target.value || '1234567890';
+        adjustFontSize(prevNrpIndividu, 16, 9);
+    });
+
+    // --- 1. Fungsi Ganti Mode (Tombol Diklik) ---
+    if (btnIndividu && btnKelompok) {
+        btnIndividu.addEventListener('click', () => {
+            btnIndividu.className = 'btn btn-primary';
+            btnKelompok.className = 'btn btn-outline';
+            btnKelompok.style.border = 'none';
+            
+            formIndividu.style.display = 'block';
+            formKelompok.style.display = 'none';
+            prevIndividuNama.style.display = 'flex';
+            prevIndividuNrp.style.display = 'flex';
+            prevKelompok.style.display = 'none';
+
+            // Ganti Gambar ke Individu
+            if (imgTemplate) imgTemplate.src = 'img/Cover TugasPraktikum.jpg';
+        });
+
+        btnKelompok.addEventListener('click', () => {
+            btnKelompok.className = 'btn btn-primary';
+            btnIndividu.className = 'btn btn-outline';
+            btnIndividu.style.border = 'none';
+            
+            formIndividu.style.display = 'none';
+            formKelompok.style.display = 'block';
+            prevIndividuNama.style.display = 'none';
+            prevIndividuNrp.style.display = 'none';
+            prevKelompok.style.display = 'flex';
+            
+            // Ganti Gambar ke Kelompok
+            if (imgTemplate) imgTemplate.src = 'img/COVER KELOMPOK.png';
+            
+            if (listAnggota.children.length === 0) tambahBarisAnggota();
+        });
+    }
+
+    // --- 2. Fungsi Cetak ke Kertas Preview (Kelompok) ---
+    function renderPreviewKelompok() {
+        prevKelompok.innerHTML = ''; 
+        const barisanForm = listAnggota.querySelectorAll('.kel-row');
+        
+        barisanForm.forEach((row, index) => {
+            const nama = row.querySelector('.kel-nama').value.trim() || 'Nama Anggota';
+            const nrp = row.querySelector('.kel-nrp').value.trim() || 'NRP';
+            
+            const labelText = index === 0 ? 'NAMA' : '';
+            
+            const divRow = document.createElement('div');
+            divRow.className = 'detail-flex-row';
+            divRow.innerHTML = `
+                <div class="lbl">${labelText}</div>
+                <div class="titik">:</div>
+                <div class="val">${nama} / ${nrp}</div>
+            `;
+            
+            prevKelompok.appendChild(divRow);
+            const valEl = divRow.querySelector('.val');
+            adjustFontSize(valEl, 16, 9); 
+        });
+    }
+
+    // --- 3. Fungsi Tambah Baris Input Kelompok ---
+    function tambahBarisAnggota() {
+        const row = document.createElement('div');
+        row.className = 'kel-row';
+        row.style.display = 'flex';
+        row.style.gap = '8px';
+        
+        row.innerHTML = `
+            <input type="text" class="form-control kel-nama" placeholder="Nama" style="flex: 1; padding: 10px;">
+            <input type="text" class="form-control kel-nrp" placeholder="NRP" style="width: 100px; padding: 10px;">
+            <button type="button" class="btn btn-outline btn-hapus-kel" style="padding: 10px; color: #f43f5e; border-color: #f43f5e;">
+                <i class='bx bx-trash'></i>
+            </button>
+        `;
+        
+        row.querySelector('.kel-nama').addEventListener('input', renderPreviewKelompok);
+        row.querySelector('.kel-nrp').addEventListener('input', renderPreviewKelompok);
+        
+        row.querySelector('.btn-hapus-kel').addEventListener('click', () => {
+            row.remove();
+            renderPreviewKelompok(); 
+        });
+        
+        listAnggota.appendChild(row);
+        renderPreviewKelompok();
+    }
+
+    if (btnTambah) btnTambah.addEventListener('click', tambahBarisAnggota);
+
+    // --- 4. Fungsi Download Kertas (Sempurna) ---
     const btnDownload = document.getElementById('btnDownloadCover');
     const areaKertas = document.getElementById('kertasPreview');
 
     if (btnDownload && areaKertas) {
         btnDownload.addEventListener('click', async () => {
-            // Ubah state tombol agar user tahu sedang memproses
             const originalText = btnDownload.innerHTML;
-            btnDownload.innerHTML = `<i class='bx bx-loader-alt bx-spin'></i> Memproses Gambar...`;
+            btnDownload.innerHTML = `<i class='bx bx-loader-alt bx-spin'></i> Memproses...`;
             btnDownload.disabled = true;
 
             try {
-                // Render elemen kertas menjadi Canvas
                 const canvas = await html2canvas(areaKertas, {
-                    scale: 2, // Kualitas HD 2x lipat
+                    scale: 2, 
                     useCORS: true,
                     backgroundColor: "#ffffff",
                     logging: false
                 });
 
-                // Ekstrak canvas ke Base64 (JPG)
                 const imageData = canvas.toDataURL("image/jpeg", 1.0);
                 
-                // Buat nama file yang rapi
                 const kegiatan = document.getElementById('covJenisLaporan').value || 'TUGAS';
-                const nama = document.getElementById('covNama').value || 'Mahasiswa';
                 const matkul = document.getElementById('covMatkul').value || 'Kuliah';
+                let mode = btnKelompok.classList.contains('btn-primary') ? 'Kelompok' : 'Individu';
+                let penanda = mode === 'Individu' ? (document.getElementById('covNama').value || 'Mahasiswa') : 'Kelompok';
                 
-                // Proses pemicuan unduh file otomatis
                 const link = document.createElement("a");
                 link.href = imageData;
-                link.download = `Cover_${kegiatan}_${matkul.replace(/\s+/g, '_')}_${nama.replace(/\s+/g, '_')}.jpg`;
+                link.download = `Cover_${mode}_${kegiatan}_${matkul.replace(/\s+/g, '_')}_${penanda.replace(/\s+/g, '_')}.jpg`;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
                 
             } catch (error) {
                 console.error("Gagal mendownload cover:", error);
-                alert("Maaf, terjadi kesalahan saat mengekspor gambar.");
+                alert("Maaf, terjadi kesalahan saat memproses gambar.");
             } finally {
-                // Kembalikan tombol ke kondisi semula
                 btnDownload.innerHTML = originalText;
                 btnDownload.disabled = false;
             }
