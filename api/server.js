@@ -4,7 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 
-const User = require("../backend/database");
+const User = require("./database");
 
 const app = express();
 
