@@ -907,6 +907,7 @@ window.renderKasAnda = () => {
 
     const roleSekarang = localStorage.getItem('user_role');
     const namaSekarang = localStorage.getItem('user_name');
+    const nrpSekarang = localStorage.getItem('user_nrp');
 
     if (roleSekarang === 'admin') { elNama.innerText = "Mode Admin Akses (Tidak ada tagihan)"; return; }
     if (!namaSekarang || namaSekarang === 'Tamu') { elNama.innerText = "Silakan Logout dan Login ulang dengan NRP Anda."; return; }
