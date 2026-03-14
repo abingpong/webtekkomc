@@ -1,10 +1,16 @@
-require("dotenv").config();
+import mongoose from "mongoose";
 
-const mongoose = require("mongoose");
+let isConnected = false;
 
-mongoose.connect(process.env.MONGO_URI)
-.then(()=>console.log("MongoDB connected"))
-.catch(err=>console.log(err));
+export async function connectDB() {
+
+if (isConnected) return;
+
+await mongoose.connect(process.env.MONGO_URI);
+
+isConnected = true;
+
+}
 
 const userSchema = new mongoose.Schema({
 nrp:String,
@@ -13,4 +19,4 @@ password:String,
 role:String
 });
 
-module.exports = mongoose.model("User",userSchema);
+export const User = mongoose.models.User || mongoose.model("User", userSchema);
