@@ -1638,7 +1638,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const eventType = inputEl.tagName === 'SELECT' ? 'change' : 'input';
 
             // Tentukan ukuran standar berdasarkan elemennya (sesuai CSS)
-            let ukuranDefault = 14.5; // Ukuran untuk Nama, NRP, Dosen, dll
+            let ukuranDefault = 15; // Ukuran untuk Nama, NRP, Dosen, dll
             if (inputId === 'covJudul') ukuranDefault = 16;         // Ukuran Sub-Judul
             if (inputId === 'covJenisLaporan') ukuranDefault = 28;  // Ukuran Judul Utama
 

@@ -465,7 +465,7 @@ right:auto;
     display: flex;
     flex-direction: column;
     /* Mengatur jarak vertikal antar baris Flexbox (padat) */
-    gap: 4px 0; 
+    gap: 7.5px 0; 
 }
 
 /* Class Flexbox baru untuk setiap baris tunggal */
@@ -476,7 +476,7 @@ right:auto;
     width: 100%;
     font-weight: 700;
     text-transform: uppercase;
-    font-size: 14.5px; 
+    font-size: 15px; 
 }
 
 /* Berikan lebar tetap pada label dan titik dua */
@@ -501,32 +501,3 @@ right:auto;
     /* text-overflow: ellipsis; <-- Hapus agar auto-resize berjalan mulus */
 }
 /* === AKHIR GANTI STYLING DETAIL-BOX === */
-
-/* Kotak Detail Bawah */
-.detail-grid {
-    display: grid;
-    grid-template-columns: 140px 15px 1fr;
-    
-    /* UBAH JARAK BARIS DI SINI (sebelumnya 10px, sekarang 4px agar lebih padat) */
-    gap: 7px 0; 
-    
-    /* Sesuaikan ukuran font agar lebih proporsional dengan jarak yang baru */
-    font-size: 15px; 
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.detail-grid .lbl {
-    font-weight: 800;
-}
-
-.detail-grid .titik {
-    text-align: center;
-}
-
-.detail-grid .val {
-    white-space: nowrap;
-    overflow: hidden;
-    /* text-overflow: ellipsis; <-- Hapus baris ini */
-    width: 100%; /* Pastikan lebarnya maksimal menyesuaikan grid */
-}
