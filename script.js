@@ -22,7 +22,7 @@ Authorization:"Bearer "+token
 
 const userRole = localStorage.getItem("user_role");
 const userName = localStorage.getItem("user_name") || "Mahasiswa";
-const userNRP = localStorage.getItem("user_nrp") || "";
+const userNRP = localStorage.getItem("user_nrp") || "Mahasiswa";
 
 document.addEventListener("DOMContentLoaded",()=>{
 document.body.classList.add("page-enter");
@@ -913,7 +913,7 @@ window.renderKasAnda = () => {
     if (!namaSekarang || namaSekarang === 'Tamu') { elNama.innerText = "Silakan Logout dan Login ulang dengan NRP Anda."; return; }
 
     elNama.innerText = namaSekarang;
-    const myData = dataKasMingguan.find(siswa => siswa.nama === namaSekarang);
+    const myData = dataKasMingguan.find(siswa => siswa.nama === nrpSekarang);
 
     if (myData) {
         let lunas = 0, nunggak = 0, mingguAktif = 0;
