@@ -1729,6 +1729,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- TOGGLE MODE INDIVIDU / KELOMPOK ---
     if (btnIndividu && btnKelompok) {
+        const kotakDetailKertas = document.querySelector('.detail-box'); // Ambil elemen kotak teks
+
         btnIndividu.addEventListener('click', () => {
             modeSekarang = 'individu';
             btnIndividu.className = 'btn btn-primary'; btnKelompok.className = 'btn btn-outline'; btnKelompok.style.border = 'none';
@@ -1737,7 +1739,10 @@ document.addEventListener('DOMContentLoaded', () => {
             prevIndividuNama.style.display = 'flex'; prevIndividuNrp.style.display = 'flex';
             prevKelompok.style.display = 'none';
             
-            if (imgTemplate) imgTemplate.src = 'img/cover-template.png';
+            if (imgTemplate) imgTemplate.src = 'img/Cover TugasPraktikum.jpg';
+            
+            // KEMBALIKAN UKURAN KOTAK KE INDIVIDU
+            if (kotakDetailKertas) kotakDetailKertas.classList.remove('mode-kelompok-aktif');
         });
 
         btnKelompok.addEventListener('click', () => {
@@ -1748,10 +1753,12 @@ document.addEventListener('DOMContentLoaded', () => {
             prevIndividuNama.style.display = 'none'; prevIndividuNrp.style.display = 'none';
             prevKelompok.style.display = 'flex';
             
-            if (imgTemplate) imgTemplate.src = 'img/cover-kelompok.png';
+            if (imgTemplate) imgTemplate.src = 'img/COVER KELOMPOK.png';
             if (listAnggota.children.length === 0) tambahBarisAnggota();
             
-            // Timeout kecil agar DOM selesai merender display:flex sebelum kalkulasi width
+            // PERLEBAR KOTAK KHUSUS KELOMPOK KE KIRI & KANAN
+            if (kotakDetailKertas) kotakDetailKertas.classList.add('mode-kelompok-aktif');
+            
             setTimeout(renderPreviewKelompok, 50); 
         });
     }
