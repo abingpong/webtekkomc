@@ -1739,7 +1739,7 @@ document.addEventListener('DOMContentLoaded', () => {
             prevIndividuNama.style.display = 'flex'; prevIndividuNrp.style.display = 'flex';
             prevKelompok.style.display = 'none';
             
-            if (imgTemplate) imgTemplate.src = 'img/Cover TugasPraktikum.jpg';
+            if (imgTemplate) imgTemplate.src = 'img/cover-template.png';
             
             // KEMBALIKAN UKURAN KOTAK KE INDIVIDU
             if (kotakDetailKertas) kotakDetailKertas.classList.remove('mode-kelompok-aktif');
@@ -1753,7 +1753,7 @@ document.addEventListener('DOMContentLoaded', () => {
             prevIndividuNama.style.display = 'none'; prevIndividuNrp.style.display = 'none';
             prevKelompok.style.display = 'flex';
             
-            if (imgTemplate) imgTemplate.src = 'img/COVER KELOMPOK.png';
+            if (imgTemplate) imgTemplate.src = 'img/cover-kelompok.png';
             if (listAnggota.children.length === 0) tambahBarisAnggota();
             
             // PERLEBAR KOTAK KHUSUS KELOMPOK KE KIRI & KANAN
