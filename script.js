@@ -13,7 +13,7 @@ if(!token){
     window.location.replace("login.html");
 }
 // VERIFIKASI TOKEN KE BACKEND
-fetch("http://localhost:5000/verify",{
+fetch("http://localhost:3000/verify",{
 method:"GET",
 headers:{
 "Authorization":"Bearer "+token
