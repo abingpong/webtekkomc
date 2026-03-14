@@ -903,7 +903,7 @@ let canEdit = (roleSekarang === 'admin' || roleSekarang === 'bendahara');
 function normalizeNama(nama){
 return nama
 .toLowerCase()
-.replace(/\./g,'')
+.replace(/[.'’]/g,'')   // hapus titik dan apostrof
 .replace(/\s+/g,' ')
 .trim();
 }
