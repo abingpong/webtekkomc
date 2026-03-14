@@ -1687,7 +1687,7 @@ document.addEventListener('DOMContentLoaded', () => {
             prevKelompok.style.display = 'none';
 
             // Ganti Gambar ke Individu
-            if (imgTemplate) imgTemplate.src = 'img/Cover TugasPraktikum.jpg';
+            if (imgTemplate) imgTemplate.src = 'img/cover-template.png';
         });
 
         btnKelompok.addEventListener('click', () => {
@@ -1702,7 +1702,7 @@ document.addEventListener('DOMContentLoaded', () => {
             prevKelompok.style.display = 'flex';
             
             // Ganti Gambar ke Kelompok
-            if (imgTemplate) imgTemplate.src = 'img/COVER KELOMPOK.png';
+            if (imgTemplate) imgTemplate.src = 'img/cover-kelompok.png';
             
             if (listAnggota.children.length === 0) tambahBarisAnggota();
         });
