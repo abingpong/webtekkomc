@@ -1633,3 +1633,38 @@ link.click()
 })
 
 }
+
+/* =========================
+AUTO FILL USER DATA
+========================= */
+
+function loadUserCover(){
+
+const nama = document.getElementById("userNameDisplay")?.innerText || ""
+const nrp = document.getElementById("userRoleDisplay")?.innerText || ""
+
+document.getElementById("cv_nama").value = nama
+document.getElementById("cv_nrp").value = nrp
+
+document.getElementById("cv_nama_preview").innerText = nama
+document.getElementById("cv_nrp_preview").innerText = nrp
+
+}
+
+document.addEventListener("DOMContentLoaded",loadUserCover)
+
+function updateCoverPreview(){
+
+cv_judul_preview.innerText = cv_judul.value
+cv_matkul_preview.innerText = cv_matkul.value
+cv_dosen_preview.innerText = cv_dosen.value
+cv_aslab_preview.innerText = cv_aslab.value
+cv_hari_preview.innerText = cv_hari.value
+cv_tanggal_preview.innerText = cv_tanggal.value
+
+}
+
+document.querySelectorAll("#cover input, #cover select")
+.forEach(el=>{
+el.addEventListener("input",updateCoverPreview)
+})
