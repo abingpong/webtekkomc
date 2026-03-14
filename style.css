@@ -455,12 +455,52 @@ right:auto;
     color: #334155; 
 }
 
-/* Kotak Detail Bawah */
+/* === GANTI STYLING DETAIL-BOX LAMA DENGAN INI === */
+/* Kotak Detail Bawah (Tetap di posisi yang sama) */
 .detail-box {
     top: 64.8%; /* Atur % ini jika teks detail kurang ke atas/bawah */
     left: 27%;
     width: 46%;
+    font-family: 'Montserrat', sans-serif; /* Pastikan font elegan */
+    display: flex;
+    flex-direction: column;
+    /* Mengatur jarak vertikal antar baris Flexbox (padat) */
+    gap: 4px 0; 
 }
+
+/* Class Flexbox baru untuk setiap baris tunggal */
+.detail-flex-row {
+    display: flex;
+    /* Kunci penyelarasan vertikal sempurna: center */
+    align-items: center; 
+    width: 100%;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 14.5px; 
+}
+
+/* Berikan lebar tetap pada label dan titik dua */
+.detail-flex-row .lbl {
+    font-weight: 800;
+    width: 140px; /* Lebar label Nama, NRP, dll */
+    flex-shrink: 0; /* Jangan biarkan Flexbox mengecilkan label */
+}
+
+.detail-flex-row .titik {
+    width: 15px; /* Lebar kolom titik dua */
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* Nilai dinamis akan mengambil sisa ruang yang ada di kanan */
+.detail-flex-row .val {
+    flex: 1; /* Ambil sisa ruang */
+    min-width: 0; /* Penting agar Flexbox mengizinkan teks mengecil */
+    white-space: nowrap;
+    overflow: hidden;
+    /* text-overflow: ellipsis; <-- Hapus agar auto-resize berjalan mulus */
+}
+/* === AKHIR GANTI STYLING DETAIL-BOX === */
 
 /* Kotak Detail Bawah */
 .detail-grid {
