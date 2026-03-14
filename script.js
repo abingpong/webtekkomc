@@ -1708,29 +1708,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-   // Di script.js, cari fungsi renderPreviewKelompok()
-// ==========================================
-// ... (Bagian State & Konfigurasi, Fungsi Auto Resize, dst.) ...
-
-    // --- 2. Fungsi Cetak ke Kertas Preview (Kelompok) ---
+  // --- 3. Fungsi Cetak ke Kertas Preview (Kelompok) ---
     function renderPreviewKelompok() {
-        prevKelompok.innerHTML = ''; 
+        const prevKelompok = document.getElementById('rowPrevKelompok');
+        const listAnggota = document.getElementById('listAnggotaKelompok');
+        if (!prevKelompok || !listAnggota) return;
+
+        prevKelompok.innerHTML = ''; // Bersihkan cetakan lama
+        
+        // Ambil semua baris form anggota yang ada di kiri
         const barisanForm = listAnggota.querySelectorAll('.kel-row');
         
-        // GANTI SELURUH LOOP FOR EACH INI
         barisanForm.forEach((row, index) => {
-            const nama = row.querySelector('.kel-nama').value.trim() || 'Nama Anggota';
-            const nrp = row.querySelector('.kel-nrp').value.trim() || 'NRP';
+            const inputNama = row.querySelector('.kel-nama');
+            const inputNrp = row.querySelector('.kel-nrp');
+            
+            const nama = inputNama ? inputNama.value.trim() || 'Nama Anggota' : 'Nama Anggota';
+            const nrp = inputNrp ? inputNrp.value.trim() || 'NRP' : 'NRP';
             
             // Hanya baris paling atas yang dapat label "NAMA"
             const labelText = index === 0 ? 'NAMA' : '';
             
-            // Buat baris Flexbox baru agar rapi dan selaras dengan layout lama
+            // Bikin kerangka HTML untuk baris baru di dalam kertas
             const divRow = document.createElement('div');
-            // Tambahkan kelas group-row
             divRow.className = 'detail-flex-row group-row'; 
             
-            // Ubah innerHTML untuk menyertakan elemen terpisah untuk nama dan nrp
             divRow.innerHTML = `
                 <div class="lbl">${labelText}</div>
                 <div class="titik">:</div>
@@ -1741,22 +1743,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
             
+            // Masukkan ke dalam wadah kertas kelompok
             prevKelompok.appendChild(divRow);
             
-            // Terapkan auto-resize ke elemen nama dan nrp yang baru dibuat
+            // Panggil fungsi auto-resize (batas maksimal 16px, minimal 9px)
             const nameEl = divRow.querySelector('.member-name');
-            const nrpEl = divRow.querySelector('.member-nrp');
+            const nrpTextEl = divRow.querySelector('.member-nrp');
             
-            // NAMA dan NRP memiliki ukuran font default yang berbeda.
-            // NAMA (individu) default 16px. NRP label (individu) default 16px. NRP value (individu) default 16px.
-            // Di mode individu, semua detail-flex-row memiliki font-size: 16px.
-            // Di JS, ukuranDefault untuk nama/nrp individu adalah 16px.
-            // Mari kita gunakan 16px untuk keduanya di sini.
-            
-            // NAMA: Terapkan auto-resize. Batas minimal 9px.
-            adjustFontSizeKelompok(nameEl, 16, 9); 
-            // NRP: Terapkan auto-resize (untuk nrp yang sangat panjang jika ada). Batas minimal 9px.
-            adjustFontSizeKelompok(nrpEl, 16, 9); 
+            if (typeof adjustFontSizeKelompok === "function") {
+                if (nameEl) adjustFontSizeKelompok(nameEl, 16, 9); 
+                if (nrpTextEl) adjustFontSizeKelompok(nrpTextEl, 16, 9); 
+            }
         });
     }
 

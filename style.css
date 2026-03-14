@@ -517,7 +517,7 @@ right:auto;
 /* Modifikasi .detail-box-kelompok untuk mendukung elemen nilai flexbox */
 .kertas-a4 .detail-box-kelompok {
     /* gap: 4px 0; <-- Hapus baris ini agar sisa ruang dikelola oleh justify-content */
-    gap: 0; 
+    gap: 7.5px; 
 }
 
 /* Modifikasi .detail-flex-row kelompok */
@@ -560,4 +560,53 @@ right:auto;
     overflow: hidden;
     text-overflow: clip; /* Hindari titik-titik agar auto-resize berfungsi */
     flex-shrink: 0; /* Jangan biarkan nrp mengecil */
+}
+
+/* ==========================================
+   PENGATURAN POSISI COVER KELOMPOK
+========================================== */
+
+/* FIX BUG: Memastikan wadah anggota kelompok selalu menumpuk ke bawah */
+#rowPrevKelompok {
+    display: flex !important;
+    flex-direction: column !important; /* Wajib agar nama ke-2 turun ke bawah */
+    width: 100%;
+    
+    /* MENGATUR JARAK ATAS-BAWAH ANTAR ANGGOTA (GAP) */
+    gap: 6px 0; /* Ubah angka 6px jika ingin lebih renggang/padat */
+}
+
+/* Mengatur Posisi Kanan-Kiri (Nama & NRP) */
+.detail-flex-row.group-row .val {
+    display: flex;
+    justify-content: space-between; /* Mendorong Nama mentok Kiri, NRP mentok Kanan */
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    
+    /* MENGATUR POSISI KANAN & KIRI */
+    padding-left: 0px;  /* Ubah angka ini untuk menggeser Nama dari titik dua */
+    padding-right: 0px; /* Ubah angka ini untuk menggeser NRP dari batas kotak kanan */
+}
+
+/* Penyelarasan teks */
+.detail-flex-row.group-row .member-name {
+    flex: 1;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.detail-flex-row.group-row .separator {
+    width: 30px; 
+    text-align: center;
+    font-weight: 800;
+}
+
+.detail-flex-row.group-row .member-nrp {
+    width: 100px; 
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    flex-shrink: 0;
 }
