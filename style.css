@@ -468,7 +468,7 @@ right:auto;
     grid-template-columns: 140px 15px 1fr;
     
     /* UBAH JARAK BARIS DI SINI (sebelumnya 10px, sekarang 4px agar lebih padat) */
-    gap: 5px 0; 
+    gap: 7px 0; 
     
     /* Sesuaikan ukuran font agar lebih proporsional dengan jarak yang baru */
     font-size: 15px; 
