@@ -1594,3 +1594,90 @@ window.balasFeedback = async (id) => {
         }
     }
 };
+
+// ==========================================
+// 12. LOGIKA GENERATOR COVER PRAKTIKUM
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+    // Pemetaan ID Input form ke ID Text Overlay di Preview
+    const coverMapping = {
+        'covJudul': 'prevJudul',
+        'covNama': 'prevNama',
+        'covNrp': 'prevNrp',
+        'covKelas': 'prevKelas',
+        'covMatkul': 'prevMatkul',
+        'covDosen': 'prevDosen',
+        'covAsisten': 'prevAsisten',
+        'covHari': 'prevHari',
+        'covTgl': 'prevTgl'
+    };
+
+    // Pasang Event Listener 'input' ke setiap kolom
+    for (const [inputId, prevId] of Object.entries(coverMapping)) {
+        const inputEl = document.getElementById(inputId);
+        const prevEl = document.getElementById(prevId);
+
+        if (inputEl && prevEl) {
+            // Ambil teks asli sebagai fallback jika input kosong
+            const fallbackText = prevEl.innerText; 
+            
+            inputEl.addEventListener('input', (e) => {
+                let text = e.target.value.trim();
+                prevEl.innerText = text || fallbackText;
+                
+                // Pengecilan font otomatis khusus untuk Judul Cover jika terlalu panjang
+                if (inputId === 'covJudul') {
+                    if (text.length > 40) prevEl.style.fontSize = '16px';
+                    else if (text.length > 25) prevEl.style.fontSize = '18px';
+                    else prevEl.style.fontSize = '22px';
+                }
+            });
+        }
+    }
+
+    // Fungsi Download Kertas menggunakan html2canvas
+    const btnDownload = document.getElementById('btnDownloadCover');
+    const areaKertas = document.getElementById('kertasPreview');
+
+    if (btnDownload && areaKertas) {
+        btnDownload.addEventListener('click', async () => {
+            // Simpan state awal tombol
+            const originalText = btnDownload.innerHTML;
+            btnDownload.innerHTML = `<i class='bx bx-loader-alt bx-spin'></i> Memproses...`;
+            btnDownload.disabled = true;
+
+            try {
+                // Konfigurasi html2canvas untuk hasil yang tajam
+                const canvas = await html2canvas(areaKertas, {
+                    scale: 2, // Skala 2x lipat agar gambar tidak pecah saat diprint
+                    useCORS: true,
+                    backgroundColor: "#ffffff",
+                    logging: false
+                });
+
+                // Ubah ke format JPG
+                const imageData = canvas.toDataURL("image/jpeg", 1.0);
+                
+                // Ambil Nama & Matkul untuk penamaan file otomatis
+                const nama = document.getElementById('covNama').value || 'Mahasiswa';
+                const matkul = document.getElementById('covMatkul').value || 'Praktikum';
+                
+                // Trigger Download
+                const link = document.createElement("a");
+                link.href = imageData;
+                link.download = `Cover_${matkul.replace(/\s+/g, '_')}_${nama.replace(/\s+/g, '_')}.jpg`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+            } catch (error) {
+                console.error("Gagal mendownload cover:", error);
+                alert("Maaf, terjadi kesalahan saat memproses gambar.");
+            } finally {
+                // Kembalikan state tombol
+                btnDownload.innerHTML = originalText;
+                btnDownload.disabled = false;
+            }
+        });
+    }
+});
