@@ -49,7 +49,7 @@ const password = document.getElementById("passwordInput").value;
 
 try{
 
-const res = await fetch("http:/api/login",{
+fetch("/api/login",{
 method:"POST",
 headers:{
 "Content-Type":"application/json"

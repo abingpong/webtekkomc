@@ -13,21 +13,11 @@ if(!token){
     window.location.replace("login.html");
 }
 // VERIFIKASI TOKEN KE BACKEND
-fetch("http:/api/verify",{
+fetch("/api/verify",{
 method:"GET",
 headers:{
-"Authorization":"Bearer "+token
+Authorization:"Bearer "+token
 }
-})
-.then(res=>{
-if(!res.ok){
-localStorage.clear();
-window.location.replace("login.html");
-}
-})
-.catch(()=>{
-localStorage.clear();
-window.location.replace("login.html");
 });
 
 const userRole = localStorage.getItem("user_role");
