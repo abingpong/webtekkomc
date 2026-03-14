@@ -1708,15 +1708,30 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-  // --- 3. Fungsi Cetak ke Kertas Preview (Kelompok) ---
+// --- 2. Fungsi Resize Font Khusus Kelompok (DIPERBAIKI) ---
+    // Membandingkan ukuran <span> (teks) dengan <div> (wadahnya)
+    function adjustFontSizeKelompok(wadahEl, spanEl, defaultSize, minSize) {
+        spanEl.style.fontSize = defaultSize + 'px';
+        let currentSize = defaultSize;
+        
+        // Pengecekan aman agar tidak eror jika kotak disembunyikan
+        if (wadahEl.clientWidth === 0) return; 
+
+        // Selama teks lebih panjang dari wadahnya, kecilkan!
+        while (spanEl.offsetWidth > wadahEl.clientWidth && currentSize > minSize) {
+            currentSize -= 0.5;
+            spanEl.style.fontSize = currentSize + 'px';
+        }
+    }
+
+    // --- 3. Fungsi Cetak ke Kertas Preview Kelompok (DIPERBAIKI) ---
     function renderPreviewKelompok() {
         const prevKelompok = document.getElementById('rowPrevKelompok');
         const listAnggota = document.getElementById('listAnggotaKelompok');
         if (!prevKelompok || !listAnggota) return;
 
-        prevKelompok.innerHTML = ''; // Bersihkan cetakan lama
+        prevKelompok.innerHTML = ''; // Bersihkan dulu
         
-        // Ambil semua baris form anggota yang ada di kiri
         const barisanForm = listAnggota.querySelectorAll('.kel-row');
         
         barisanForm.forEach((row, index) => {
@@ -1726,37 +1741,36 @@ document.addEventListener('DOMContentLoaded', () => {
             const nama = inputNama ? inputNama.value.trim() || 'Nama Anggota' : 'Nama Anggota';
             const nrp = inputNrp ? inputNrp.value.trim() || 'NRP' : 'NRP';
             
-            // Hanya baris paling atas yang dapat label "NAMA"
             const labelText = index === 0 ? 'NAMA' : '';
             
-            // Bikin kerangka HTML untuk baris baru di dalam kertas
             const divRow = document.createElement('div');
             divRow.className = 'detail-flex-row group-row'; 
             
+            // Perhatikan elemen <span class="resize-text"> yang membungkus teks
             divRow.innerHTML = `
                 <div class="lbl">${labelText}</div>
                 <div class="titik">:</div>
                 <div class="val">
-                    <div class="member-name">${nama}</div>
+                    <div class="member-name"><span class="resize-text">${nama}</span></div>
                     <div class="separator">/</div>
-                    <div class="member-nrp">${nrp}</div>
+                    <div class="member-nrp"><span class="resize-text">${nrp}</span></div>
                 </div>
             `;
             
-            // Masukkan ke dalam wadah kertas kelompok
             prevKelompok.appendChild(divRow);
             
-            // Panggil fungsi auto-resize (batas maksimal 16px, minimal 9px)
-            const nameEl = divRow.querySelector('.member-name');
-            const nrpTextEl = divRow.querySelector('.member-nrp');
+            // Panggil fungsi Auto-Resize yang sudah cerdas
+            const wadahNama = divRow.querySelector('.member-name');
+            const spanNama = wadahNama.querySelector('.resize-text');
+            const wadahNrp = divRow.querySelector('.member-nrp');
+            const spanNrp = wadahNrp.querySelector('.resize-text');
             
             if (typeof adjustFontSizeKelompok === "function") {
-                if (nameEl) adjustFontSizeKelompok(nameEl, 16, 9); 
-                if (nrpTextEl) adjustFontSizeKelompok(nrpTextEl, 16, 9); 
+                adjustFontSizeKelompok(wadahNama, spanNama, 16, 9); 
+                adjustFontSizeKelompok(wadahNrp, spanNrp, 16, 9); 
             }
         });
     }
-
 // ... (Bagian Tambah Baris Anggota, Toggle Mode, dst.) ...
 
     // --- 3. Fungsi Tambah Baris Input Kelompok ---
