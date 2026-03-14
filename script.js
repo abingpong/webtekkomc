@@ -1594,3 +1594,235 @@ window.balasFeedback = async (id) => {
         }
     }
 };
+
+/* ===============================
+   GENERATOR COVER PRAKTIKUM
+================================ */
+
+const canvas = document.getElementById("coverCanvas");
+let ctx;
+
+if(canvas){
+ctx = canvas.getContext("2d");
+ctx.font = "600 28px Poppins";
+
+const template = new Image();
+template.src = "img/cover-template.png";
+
+template.onload = function(){
+ctx.drawImage(template,0,0,canvas.width,canvas.height);
+};
+
+
+function downloadCover(){
+
+const link=document.createElement("a");
+
+link.download="cover-praktikum.png";
+link.href=canvas.toDataURL("image/png");
+
+link.click();
+
+}
+
+}
+
+const user = JSON.parse(localStorage.getItem("user"));
+
+if(user){
+
+cv_nama.value = user.nama;
+cv_nrp.value = user.nrp;
+cv_kelas.value = user.kelas;
+
+}
+
+const daftarMatkul = [
+
+"Agama",
+"Pemrograman Dasar 2",
+"Prakt. Pemrograman Dasar 2",
+"Matematika 2",
+"Rangkaian Elektronika 2",
+"Prakt. Rangkaian Elektronika 2",
+"Rangkaian Logika 2",
+"Prakt. Rangkaian Logika 2",
+"Workshop Basis Data",
+"Workshop Instrumentasi & Telemetri"
+
+];
+
+const selectMatkul = document.getElementById("cv_matkul");
+
+daftarMatkul.forEach(mk=>{
+const option = document.createElement("option");
+option.value = mk;
+option.textContent = mk;
+selectMatkul.appendChild(option);
+});
+
+function drawWrappedTitle(text,x,y,maxWidth){
+
+let fontSize = 42;
+
+ctx.textAlign="center";
+
+while(fontSize > 22){
+
+ctx.font = "bold "+fontSize+"px Arial";
+
+const words = text.split(" ");
+let lines=[];
+let current="";
+
+for(let w of words){
+
+let test = current+w+" ";
+
+if(ctx.measureText(test).width > maxWidth){
+
+lines.push(current);
+current=w+" ";
+
+}else{
+
+current=test;
+
+}
+
+}
+
+lines.push(current);
+
+if(lines.length <=3){
+
+lines.forEach((line,i)=>{
+ctx.fillText(line.trim(),x,y+(i*45));
+});
+
+break;
+
+}
+
+fontSize--;
+
+}
+
+}
+
+function generateCover(){
+
+ctx.drawImage(template,0,0,canvas.width,canvas.height);
+
+const judul = cv_judul.value;
+const nama = cv_nama.value;
+const nrp = cv_nrp.value;
+const kelas = cv_kelas.value;
+const matkul = cv_matkul.value;
+const dosen = cv_dosen.value;
+const aslab = cv_aslab.value;
+const hari = cv_hari.value;
+const tanggal = cv_tanggal.value;
+
+ctx.fillStyle="#000";
+
+drawMultilineTitle(
+judul,
+canvas.width/2,
+340,
+820
+);
+
+ctx.font="600 28px Poppins";
+ctx.textAlign="left";
+
+ctx.fillText(nama,520,1110);
+ctx.fillText(nrp,520,1160);
+ctx.fillText(kelas,520,1210);
+ctx.fillText(matkul,520,1260);
+ctx.fillText(dosen,520,1310);
+ctx.fillText(aslab,520,1360);
+ctx.fillText(hari,520,1410);
+ctx.fillText(tanggal,520,1460);
+
+}
+
+function fitText(text,maxWidth,startSize){
+
+let size = startSize;
+
+while(size > 16){
+
+ctx.font = `600 ${size}px Poppins`;
+
+if(ctx.measureText(text).width <= maxWidth){
+return size;
+}
+
+size--;
+
+}
+
+return size;
+
+}
+
+function drawMultilineTitle(text,x,y,maxWidth){
+
+let words = text.split(" ");
+let lines=[];
+let line="";
+
+ctx.font="700 42px Poppins";
+
+for(let w of words){
+
+let test=line+w+" ";
+
+if(ctx.measureText(test).width > maxWidth){
+
+lines.push(line);
+line=w+" ";
+
+}else{
+
+line=test;
+
+}
+
+}
+
+lines.push(line);
+
+let fontSize = 42;
+
+if(lines.length>3){
+fontSize = 34;
+}
+
+ctx.font=`700 ${fontSize}px Poppins`;
+ctx.textAlign="center";
+
+lines.forEach((l,i)=>{
+
+ctx.fillText(
+l.trim(),
+x,
+y + (i*(fontSize+10))
+);
+
+});
+
+}
+
+function downloadCover(){
+
+const link=document.createElement("a");
+
+link.download="cover-praktikum.png";
+
+link.href=canvas.toDataURL("image/png",1.0);
+
+link.click();
+
+}
