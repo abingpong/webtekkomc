@@ -420,44 +420,57 @@ right:auto;
 .detail-flex-row .val { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-align: left; }
 
 /* ==========================================
-   2. PENGATURAN KHUSUS KELOMPOK (DIISOLASI)
+   2. PENGATURAN KHUSUS KELOMPOK (PERLUASAN AREA EKSTREM)
 ========================================== */
 #rowPrevKelompok {
-    /* display: flex !important; <-- HAPUS ATAU KOMENTARI BARIS INI */
-    flex-direction: column !important; /* Ini biarkan agar tetap turun ke bawah */
+    flex-direction: column !important; /* Tetap turun ke bawah */
     width: 100%;
-    gap: 4px 0; 
+    gap: 6px 0; 
 }
+
+.detail-flex-row.group-row {
+    font-size: 16px; 
+    gap: 0;
+}
+
+/* 1. MENGURANGI LEBAR LABEL AGAR NAMA GESER KE KIRI */
+.detail-flex-row.group-row .lbl {
+    width: 60px !important; /* Diciutkan dari 140px ke 60px. Kita untung 80px! */
+}
+
+/* 2. AREA NILAI (NAMA & NRP) DIPERLUAS MENTOK KANAN & KIRI */
 .detail-flex-row.group-row .val {
-    display: flex; justify-content: space-between; align-items: center;
-    padding-left: 0 !important; padding-right: 0 !important;
-    
-    /* Mepet ke kiri (nempel banget ke titik dua) */
-    margin-left: -8px;
-    
-    /* Mepet ke kanan (menembus batas margin asli kotak abu-abu) */
-    margin-right: -25px; 
-    
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+    padding-left: 10px !important; /* Sedikit jarak dari titik dua */
+    padding-right: 0 !important; 
+    margin-right: -40px; /* Tarik paksa ke kanan menembus margin kotak abu-abu */
     overflow: visible; 
+    flex: 1;
 }
 
-.group-row .member-name { 
-    flex: 1; 
-    text-align: left; 
+.group-row .member-name {
+    flex: 1;
+    text-align: left;
     overflow: hidden; 
 }
 
-.group-row .separator { 
-    /* Lebar garis miring ditekan habis-habisan */
-    width: 12px; 
-    text-align: center; 
-    font-weight: 800; 
+.group-row .separator {
+    width: 15px; /* Lebar miring penengah */
+    text-align: center;
+    font-weight: 800;
 }
 
-.group-row .member-nrp { 
-    /* Jatah NRP dicut cuma sampai 75px (pas untuk 10 angka font 16px) */
-    width: 75px; 
-    text-align: right; 
-    overflow: hidden; 
-    flex-shrink: 0; 
+.group-row .member-nrp {
+    width: 75px; /* Jatah pas untuk 10 digit NRP */
+    text-align: right;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+/* Wadah agar JS bisa membaca lebar asli teks untuk auto-resize */
+.resize-text {
+    white-space: nowrap;
+    display: inline-block;
 }
