@@ -4,9 +4,9 @@ const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const User = require("./database");
+const User = require("../backend/database");
 
-const db = require("./database");
+const db = require("../backend/database");
 
 const app = express();
 
@@ -79,10 +79,7 @@ res.status(500).json({message:"Server error"});
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-  console.log("Server running on port " + PORT);
-});
-
+module.exports = app;
 app.post("/verify-access",(req,res)=>{
 
 const {kode} = req.body;
