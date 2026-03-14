@@ -1590,199 +1590,71 @@ window.balasFeedback = async (id) => {
         
         if (balasanBaru !== null && balasanBaru.trim() !== "") {
             feedbackDatabase[index].reply = balasanBaru;
-            await updateCloudData('feedbacks', feedbackDatabase, "Developer (Abing) menanggapi laporan.");
+            await updateCloudData('feedbacks', feedbackDatabase, "Developer menanggapi laporan.");
         }
     }
 };
 
-/* ===============================
-   GENERATOR COVER PRAKTIKUM
-================================ */
+/* ===================================
+   COVER GENERATOR
+=================================== */
 
-const canvas = document.getElementById("coverCanvas");
-let ctx;
+let coverCanvas;
+let coverCtx;
+let coverTemplate;
 
-if(canvas){
-ctx = canvas.getContext("2d");
-ctx.font = "600 28px Poppins";
+/* inisialisasi */
 
-const template = new Image();
-template.src = "img/cover-template.png";
+function initCover(){
 
-template.onload = function(){
-ctx.drawImage(template,0,0,canvas.width,canvas.height);
-};
+coverCanvas = document.getElementById("coverCanvas");
 
+if(!coverCanvas) return;
 
-function downloadCover(){
+coverCtx = coverCanvas.getContext("2d");
 
-const link=document.createElement("a");
+coverTemplate = new Image();
+coverTemplate.src = "img/cover-template.png";
 
-link.download="cover-praktikum.png";
-link.href=canvas.toDataURL("image/png");
+coverTemplate.onload = function(){
 
-link.click();
-
-}
-
-}
-
-const user = JSON.parse(localStorage.getItem("user"));
-
-if(user){
-
-cv_nama.value = user.nama;
-cv_nrp.value = user.nrp;
-cv_kelas.value = user.kelas;
-
-}
-
-const daftarMatkul = [
-
-"Agama",
-"Pemrograman Dasar 2",
-"Prakt. Pemrograman Dasar 2",
-"Matematika 2",
-"Rangkaian Elektronika 2",
-"Prakt. Rangkaian Elektronika 2",
-"Rangkaian Logika 2",
-"Prakt. Rangkaian Logika 2",
-"Workshop Basis Data",
-"Workshop Instrumentasi & Telemetri"
-
-];
-
-const selectMatkul = document.getElementById("cv_matkul");
-
-daftarMatkul.forEach(mk=>{
-const option = document.createElement("option");
-option.value = mk;
-option.textContent = mk;
-selectMatkul.appendChild(option);
-});
-
-function drawWrappedTitle(text,x,y,maxWidth){
-
-let fontSize = 42;
-
-ctx.textAlign="center";
-
-while(fontSize > 22){
-
-ctx.font = "bold "+fontSize+"px Arial";
-
-const words = text.split(" ");
-let lines=[];
-let current="";
-
-for(let w of words){
-
-let test = current+w+" ";
-
-if(ctx.measureText(test).width > maxWidth){
-
-lines.push(current);
-current=w+" ";
-
-}else{
-
-current=test;
-
-}
-
-}
-
-lines.push(current);
-
-if(lines.length <=3){
-
-lines.forEach((line,i)=>{
-ctx.fillText(line.trim(),x,y+(i*45));
-});
-
-break;
-
-}
-
-fontSize--;
-
-}
-
-}
-
-function generateCover(){
-
-ctx.drawImage(template,0,0,canvas.width,canvas.height);
-
-const judul = cv_judul.value;
-const nama = cv_nama.value;
-const nrp = cv_nrp.value;
-const kelas = cv_kelas.value;
-const matkul = cv_matkul.value;
-const dosen = cv_dosen.value;
-const aslab = cv_aslab.value;
-const hari = cv_hari.value;
-const tanggal = cv_tanggal.value;
-
-ctx.fillStyle="#000";
-
-drawMultilineTitle(
-judul,
-canvas.width/2,
-340,
-820
+coverCtx.drawImage(
+coverTemplate,
+0,
+0,
+coverCanvas.width,
+coverCanvas.height
 );
 
-ctx.font="600 28px Poppins";
-ctx.textAlign="left";
-
-ctx.fillText(nama,520,1110);
-ctx.fillText(nrp,520,1160);
-ctx.fillText(kelas,520,1210);
-ctx.fillText(matkul,520,1260);
-ctx.fillText(dosen,520,1310);
-ctx.fillText(aslab,520,1360);
-ctx.fillText(hari,520,1410);
-ctx.fillText(tanggal,520,1460);
+};
 
 }
 
-function fitText(text,maxWidth,startSize){
+document.addEventListener("DOMContentLoaded", initCover);
 
-let size = startSize;
+/* ================================
+   MULTI LINE TITLE
+================================ */
 
-while(size > 16){
+function drawTitle(text,x,y,maxWidth){
 
-ctx.font = `600 ${size}px Poppins`;
-
-if(ctx.measureText(text).width <= maxWidth){
-return size;
-}
-
-size--;
-
-}
-
-return size;
-
-}
-
-function drawMultilineTitle(text,x,y,maxWidth){
+coverCtx.textAlign="center";
+coverCtx.fillStyle="#000";
 
 let words = text.split(" ");
 let lines=[];
 let line="";
 
-ctx.font="700 42px Poppins";
+coverCtx.font="700 42px Poppins";
 
-for(let w of words){
+for(let word of words){
 
-let test=line+w+" ";
+let test=line+word+" ";
 
-if(ctx.measureText(test).width > maxWidth){
+if(coverCtx.measureText(test).width>maxWidth){
 
 lines.push(line);
-line=w+" ";
+line=word+" ";
 
 }else{
 
@@ -1794,34 +1666,85 @@ line=test;
 
 lines.push(line);
 
-let fontSize = 42;
-
-if(lines.length>3){
-fontSize = 34;
-}
-
-ctx.font=`700 ${fontSize}px Poppins`;
-ctx.textAlign="center";
-
 lines.forEach((l,i)=>{
 
-ctx.fillText(
+coverCtx.fillText(
 l.trim(),
 x,
-y + (i*(fontSize+10))
+y+(i*48)
 );
 
 });
 
 }
 
+/* ================================
+   GENERATE COVER
+================================ */
+
+function generateCover(){
+
+if(!coverCanvas || !coverCtx) return;
+
+coverCtx.clearRect(
+0,
+0,
+coverCanvas.width,
+coverCanvas.height
+);
+
+coverCtx.drawImage(
+coverTemplate,
+0,
+0,
+coverCanvas.width,
+coverCanvas.height
+);
+
+const judul = document.getElementById("cv_judul").value;
+const nama = document.getElementById("cv_nama").value;
+const nrp = document.getElementById("cv_nrp").value;
+const kelas = document.getElementById("cv_kelas").value;
+const matkul = document.getElementById("cv_matkul").value;
+const dosen = document.getElementById("cv_dosen").value;
+const aslab = document.getElementById("cv_aslab").value;
+const hari = document.getElementById("cv_hari").value;
+const tanggal = document.getElementById("cv_tanggal").value;
+
+drawTitle(
+judul,
+coverCanvas.width/2,
+340,
+820
+);
+
+coverCtx.textAlign="left";
+coverCtx.font="600 28px Poppins";
+
+coverCtx.fillText(nama,520,1110);
+coverCtx.fillText(nrp,520,1160);
+coverCtx.fillText(kelas,520,1210);
+coverCtx.fillText(matkul,520,1260);
+coverCtx.fillText(dosen,520,1310);
+coverCtx.fillText(aslab,520,1360);
+coverCtx.fillText(hari,520,1410);
+coverCtx.fillText(tanggal,520,1460);
+
+}
+
+/* ================================
+   DOWNLOAD COVER
+================================ */
+
 function downloadCover(){
+
+if(!coverCanvas) return;
 
 const link=document.createElement("a");
 
 link.download="cover-praktikum.png";
 
-link.href=canvas.toDataURL("image/png",1.0);
+link.href=coverCanvas.toDataURL("image/png");
 
 link.click();
 
