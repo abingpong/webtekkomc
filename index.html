@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CE-C-25</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <script>
 /* ======================================
@@ -409,90 +408,7 @@ if(!token){
             </div>
         </div>
     
-       <div id="cover" class="view-section">
-
-                <h2 style="margin-bottom:20px;">Cover Generator</h2>
-
-                <div style="
-                display:grid;
-                grid-template-columns:340px 1fr;
-                gap:24px;
-                align-items:start;
-                ">
-
-                <!-- PANEL CONTROL -->
-
-                <div class="card-box">
-
-                <h3 style="margin-bottom:16px;">Data Cover</h3>
-
-                <div class="form-group">
-                <label>Judul Praktikum</label>
-                <textarea id="cv_judul" class="form-control" rows="2"></textarea>
-                </div>
-
-                <div class="form-group">
-                <label>Mata Kuliah</label>
-                <select id="cv_matkul" class="form-control"></select>
-                </div>
-
-                <div class="form-group">
-                <label>Dosen</label>
-                <input id="cv_dosen" class="form-control">
-                </div>
-
-                <div class="form-group">
-                <label>Asisten Lab</label>
-                <input id="cv_aslab" class="form-control">
-                </div>
-
-                <div class="form-group">
-                <label>Hari</label>
-                <input id="cv_hari" class="form-control">
-                </div>
-
-                <div class="form-group">
-                <label>Tanggal Praktikum</label>
-                <input type="date" id="cv_tanggal" class="form-control">
-                </div>
-
-                <div style="display:flex;gap:10px;margin-top:10px;">
-
-                <button class="btn btn-primary" onclick="generateCover()">
-                Generate
-                </button>
-
-                <button class="btn btn-outline" onclick="downloadCover()">
-                Download
-                </button>
-
-                </div>
-
-                </div>
-
-                <div class="cover-preview">
-
-                <div id="coverArea" class="cover-area">
-
-                <img src="img/cover-template.png" class="cover-bg">
-
-                <div id="cv_judul_preview" class="cv-judul"></div>
-
-                <div class="cv-data">
-
-                <div><span>NAMA</span><b id="cv_nama_preview"></b></div>
-                <div><span>NRP</span><b id="cv_nrp_preview"></b></div>
-                <div><span>TANGGAL</span><b id="cv_tanggal_preview"></b></div>
-
-                </div>
-
-                </div>
-
-                </div>
-
-            </div>
-
-        </div>
+        <div id="cover" class="view-section"><h2 style="margin-bottom:20px;">Cover Praktikum</h2><p class="subtitle">Segera hadir.</p></div>
         <div id="anggota" class="view-section"><h2 style="margin-bottom:20px;">Anggota Kelas</h2><p class="subtitle">Segera hadir.</p></div>
         
         <div id="kas" class="view-section">
@@ -862,7 +778,6 @@ if(!token){
         </div> 
     </div> 
 
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script type="module" src="script.js"></script>
 </body>
 </html>
