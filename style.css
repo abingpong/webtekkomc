@@ -397,13 +397,15 @@ right:auto;
 .kertas-a4 {
     width: 794px;
     height: 1123px;
-    background: white; /* Tetap putih agar bersih, tidak terpengaruh tema gelap portal */
+    background: white;
     position: relative;
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     transform-origin: top center;
-    transform: scale(0.8); /* Skala diperkecil agar pas di layar web */
-    margin-bottom: -220px; /* Kompensasi ruang kosong dari transform scale */
-    font-family: 'Inter', sans-serif; 
+    transform: scale(0.8); 
+    margin-bottom: -220px; 
+    
+    /* GANTI FONT DI SINI */
+    font-family: 'Montserrat', sans-serif; 
 }
 
 .kertas-bg {
@@ -460,11 +462,16 @@ right:auto;
     width: 46%;
 }
 
+/* Kotak Detail Bawah */
 .detail-grid {
     display: grid;
     grid-template-columns: 140px 15px 1fr;
-    gap: 10px 0;
-    font-size: 15px;
+    
+    /* UBAH JARAK BARIS DI SINI (sebelumnya 10px, sekarang 4px agar lebih padat) */
+    gap: 2px 0; 
+    
+    /* Sesuaikan ukuran font agar lebih proporsional dengan jarak yang baru */
+    font-size: 14px; 
     font-weight: 700;
     text-transform: uppercase;
 }
@@ -480,5 +487,6 @@ right:auto;
 .detail-grid .val {
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* Teks otomatis jadi "..." jika kepanjangan */
+    /* text-overflow: ellipsis; <-- Hapus baris ini */
+    width: 100%; /* Pastikan lebarnya maksimal menyesuaikan grid */
 }

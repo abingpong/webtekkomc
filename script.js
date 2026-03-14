@@ -1613,6 +1613,20 @@ document.addEventListener('DOMContentLoaded', () => {
         'covTgl': 'prevTgl'
     };
 
+// FUNGSI AUTO RESIZE FONT
+    function adjustFontSize(element, defaultSize, minSize) {
+        // 1. Reset ke ukuran default setiap kali user mengetik ulang
+        element.style.fontSize = defaultSize + 'px';
+        
+        // 2. Loop: Selama teks membludak keluar kotak (scrollWidth > clientWidth) 
+        // dan ukuran font masih di atas batas minimal, kecilkan perlahan (0.5px)
+        let currentSize = defaultSize;
+        while (element.scrollWidth > element.clientWidth && currentSize > minSize) {
+            currentSize -= 0.5;
+            element.style.fontSize = currentSize + 'px';
+        }
+    }
+
     // Pasang Event Listener 'input' ke setiap kolom
     for (const [inputId, prevId] of Object.entries(coverMapping)) {
         const inputEl = document.getElementById(inputId);
@@ -1621,20 +1635,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (inputEl && prevEl) {
             // Simpan teks bawaan (placeholder) dari HTML sebagai fallback
             const fallbackText = prevEl.innerText; 
-            
-            // Event listener khusus untuk jenis event (input atau change)
             const eventType = inputEl.tagName === 'SELECT' ? 'change' : 'input';
+
+            // Tentukan ukuran standar berdasarkan elemennya (sesuai CSS)
+            let ukuranDefault = 14.5; // Ukuran untuk Nama, NRP, Dosen, dll
+            if (inputId === 'covJudul') ukuranDefault = 16;         // Ukuran Sub-Judul
+            if (inputId === 'covJenisLaporan') ukuranDefault = 28;  // Ukuran Judul Utama
 
             inputEl.addEventListener(eventType, (e) => {
                 let text = e.target.value.trim();
                 prevEl.innerText = text || fallbackText;
                 
-                // Pengecilan font otomatis khusus untuk Judul (Deskripsi) jika kepanjangan
-                if (inputId === 'covJudul') {
-                    if (text.length > 40) prevEl.style.fontSize = '12px';
-                    else if (text.length > 25) prevEl.style.fontSize = '14px';
-                    else prevEl.style.fontSize = '16px';
-                }
+                // Panggil fungsi auto-resize setiap ada ketikan
+                // (Batas minimal font adalah 9px agar saat diprint tetap bisa dibaca)
+                adjustFontSize(prevEl, ukuranDefault, 9);
             });
         }
     }
