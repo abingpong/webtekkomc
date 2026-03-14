@@ -455,49 +455,109 @@ right:auto;
     color: #334155; 
 }
 
-/* === GANTI STYLING DETAIL-BOX LAMA DENGAN INI === */
+/* ==========================================
+   STYLING CANVAS COVER TUGAS - FLEXBOX PADA ELEMEN NILAI
+========================================== */
+
 /* Kotak Detail Bawah (Tetap di posisi yang sama) */
 .detail-box {
-    top: 65%; /* Atur % ini jika teks detail kurang ke atas/bawah */
+    top: 64.8%; /* Atur % ini jika teks detail kurang ke atas/bawah */
     left: 27%;
     width: 46%;
-    font-family: 'Montserrat', sans-serif; /* Pastikan font elegan */
+    font-family: 'Montserrat', sans-serif; 
     display: flex;
     flex-direction: column;
-    /* Mengatur jarak vertikal antar baris Flexbox (padat) */
-    gap: 7.5px 0; 
 }
 
-/* Class Flexbox baru untuk setiap baris tunggal */
+/* Modifikasi .detail-flex-row untuk mendukung elemen nilai flexbox */
 .detail-flex-row {
     display: flex;
-    /* Kunci penyelarasan vertikal sempurna: center */
     align-items: center; 
     width: 100%;
     font-weight: 700;
     text-transform: uppercase;
-    font-size: 15px; 
+    font-size: 16px; 
+    /* Hapus gap agar sisa ruang dikelola oleh justify-content */
+    gap: 0; 
 }
 
-/* Berikan lebar tetap pada label dan titik dua */
+/* Label dan titik dua tetap sama */
 .detail-flex-row .lbl {
     font-weight: 800;
-    width: 140px; /* Lebar label Nama, NRP, dll */
-    flex-shrink: 0; /* Jangan biarkan Flexbox mengecilkan label */
+    width: 140px;
+    flex-shrink: 0;
 }
 
 .detail-flex-row .titik {
-    width: 15px; /* Lebar kolom titik dua */
+    width: 15px;
     text-align: center;
     flex-shrink: 0;
 }
 
-/* Nilai dinamis akan mengambil sisa ruang yang ada di kanan */
-.detail-flex-row .val {
-    flex: 1; /* Ambil sisa ruang */
-    min-width: 0; /* Penting agar Flexbox mengizinkan teks mengecil */
+/* Elemen nilai mode individu (sebelumnya .detail-grid .val) */
+.detail-flex-row #prevNama,
+.detail-flex-row #prevNrp,
+.detail-flex-row #prevKelas,
+.detail-flex-row #prevMatkul,
+.detail-flex-row #prevDosen,
+.detail-flex-row #prevAsisten,
+.detail-flex-row #prevHari,
+.detail-flex-row #prevTgl {
+    flex: 1;
+    min-width: 0;
+    padding-left: 20px; /* Jarak dari titik dua agar seimbang secara visual */
     white-space: nowrap;
     overflow: hidden;
-    /* text-overflow: ellipsis; <-- Hapus agar auto-resize berjalan mulus */
+    text-overflow: clip; /* Hindari titik-titik agar auto-resize berfungsi */
+    text-align: left; /* Selaras kiri */
 }
-/* === AKHIR GANTI STYLING DETAIL-BOX === */
+
+/* === STYLING KHUSUS UNTUK KELOMPOK DENGAN PEMISAHAN KOLOM === */
+
+/* Modifikasi .detail-box-kelompok untuk mendukung elemen nilai flexbox */
+.kertas-a4 .detail-box-kelompok {
+    /* gap: 4px 0; <-- Hapus baris ini agar sisa ruang dikelola oleh justify-content */
+    gap: 0; 
+}
+
+/* Modifikasi .detail-flex-row kelompok */
+.kertas-a4 .detail-box-kelompok .detail-flex-row {
+    font-size: 16px; /* Gunakan 16px untuk keseimbangan */
+}
+
+/* Elemen nilai mode kelompok (sebelumnya .detail-grid .val) */
+.detail-flex-row.group-row .val {
+    display: flex;
+    justify-content: space-between; /* Pisahkan elemen ke ujung kotak */
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+    padding-left: 10px; /* Jarak dari titik dua agar seimbang secara visual */
+    padding-right: 10px; /* Jarak dari tepi kanan kotak */
+}
+
+/* Elemen Nama kelompok */
+.detail-flex-row.group-row .member-name {
+    flex: 1;
+    text-align: left; /* Selaras kiri */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip; /* Hindari titik-titik agar auto-resize berfungsi */
+}
+
+/* Jarak tetap untuk / */
+.detail-flex-row.group-row .separator {
+    width: 30px; 
+    text-align: center;
+    font-weight: 800;
+}
+
+/* Elemen NRP kelompok */
+.detail-flex-row.group-row .member-nrp {
+    width: 100px; /* Sesuaikan lebar NRP mode individu agar seimbang visual */
+    text-align: right; /* Selaras kanan */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip; /* Hindari titik-titik agar auto-resize berfungsi */
+    flex-shrink: 0; /* Jangan biarkan nrp mengecil */
+}

@@ -1708,30 +1708,59 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+   // Di script.js, cari fungsi renderPreviewKelompok()
+// ==========================================
+// ... (Bagian State & Konfigurasi, Fungsi Auto Resize, dst.) ...
+
     // --- 2. Fungsi Cetak ke Kertas Preview (Kelompok) ---
     function renderPreviewKelompok() {
         prevKelompok.innerHTML = ''; 
         const barisanForm = listAnggota.querySelectorAll('.kel-row');
         
+        // GANTI SELURUH LOOP FOR EACH INI
         barisanForm.forEach((row, index) => {
             const nama = row.querySelector('.kel-nama').value.trim() || 'Nama Anggota';
             const nrp = row.querySelector('.kel-nrp').value.trim() || 'NRP';
             
+            // Hanya baris paling atas yang dapat label "NAMA"
             const labelText = index === 0 ? 'NAMA' : '';
             
+            // Buat baris Flexbox baru agar rapi dan selaras dengan layout lama
             const divRow = document.createElement('div');
-            divRow.className = 'detail-flex-row';
+            // Tambahkan kelas group-row
+            divRow.className = 'detail-flex-row group-row'; 
+            
+            // Ubah innerHTML untuk menyertakan elemen terpisah untuk nama dan nrp
             divRow.innerHTML = `
                 <div class="lbl">${labelText}</div>
                 <div class="titik">:</div>
-                <div class="val">${nama} / ${nrp}</div>
+                <div class="val">
+                    <div class="member-name">${nama}</div>
+                    <div class="separator">/</div>
+                    <div class="member-nrp">${nrp}</div>
+                </div>
             `;
             
             prevKelompok.appendChild(divRow);
-            const valEl = divRow.querySelector('.val');
-            adjustFontSize(valEl, 16, 9); 
+            
+            // Terapkan auto-resize ke elemen nama dan nrp yang baru dibuat
+            const nameEl = divRow.querySelector('.member-name');
+            const nrpEl = divRow.querySelector('.member-nrp');
+            
+            // NAMA dan NRP memiliki ukuran font default yang berbeda.
+            // NAMA (individu) default 16px. NRP label (individu) default 16px. NRP value (individu) default 16px.
+            // Di mode individu, semua detail-flex-row memiliki font-size: 16px.
+            // Di JS, ukuranDefault untuk nama/nrp individu adalah 16px.
+            // Mari kita gunakan 16px untuk keduanya di sini.
+            
+            // NAMA: Terapkan auto-resize. Batas minimal 9px.
+            adjustFontSizeKelompok(nameEl, 16, 9); 
+            // NRP: Terapkan auto-resize (untuk nrp yang sangat panjang jika ada). Batas minimal 9px.
+            adjustFontSizeKelompok(nrpEl, 16, 9); 
         });
     }
+
+// ... (Bagian Tambah Baris Anggota, Toggle Mode, dst.) ...
 
     // --- 3. Fungsi Tambah Baris Input Kelompok ---
     function tambahBarisAnggota() {
