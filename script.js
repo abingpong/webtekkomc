@@ -1601,6 +1601,7 @@ window.balasFeedback = async (id) => {
 document.addEventListener('DOMContentLoaded', () => {
     // Pemetaan ID Input form ke ID Text Overlay di Preview
     const coverMapping = {
+        'covJenisLaporan': 'prevJenisLaporan',
         'covJudul': 'prevJudul',
         'covNama': 'prevNama',
         'covNrp': 'prevNrp',
@@ -1618,18 +1619,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const prevEl = document.getElementById(prevId);
 
         if (inputEl && prevEl) {
-            // Ambil teks asli sebagai fallback jika input kosong
+            // Simpan teks bawaan (placeholder) dari HTML sebagai fallback
             const fallbackText = prevEl.innerText; 
             
-            inputEl.addEventListener('input', (e) => {
+            // Event listener khusus untuk jenis event (input atau change)
+            const eventType = inputEl.tagName === 'SELECT' ? 'change' : 'input';
+
+            inputEl.addEventListener(eventType, (e) => {
                 let text = e.target.value.trim();
                 prevEl.innerText = text || fallbackText;
                 
-                // Pengecilan font otomatis khusus untuk Judul Cover jika terlalu panjang
+                // Pengecilan font otomatis khusus untuk Judul (Deskripsi) jika kepanjangan
                 if (inputId === 'covJudul') {
-                    if (text.length > 40) prevEl.style.fontSize = '16px';
-                    else if (text.length > 25) prevEl.style.fontSize = '18px';
-                    else prevEl.style.fontSize = '22px';
+                    if (text.length > 40) prevEl.style.fontSize = '12px';
+                    else if (text.length > 25) prevEl.style.fontSize = '14px';
+                    else prevEl.style.fontSize = '16px';
                 }
             });
         }
@@ -1641,40 +1645,41 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnDownload && areaKertas) {
         btnDownload.addEventListener('click', async () => {
-            // Simpan state awal tombol
+            // Ubah state tombol agar user tahu sedang memproses
             const originalText = btnDownload.innerHTML;
-            btnDownload.innerHTML = `<i class='bx bx-loader-alt bx-spin'></i> Memproses...`;
+            btnDownload.innerHTML = `<i class='bx bx-loader-alt bx-spin'></i> Memproses Gambar...`;
             btnDownload.disabled = true;
 
             try {
-                // Konfigurasi html2canvas untuk hasil yang tajam
+                // Render elemen kertas menjadi Canvas
                 const canvas = await html2canvas(areaKertas, {
-                    scale: 2, // Skala 2x lipat agar gambar tidak pecah saat diprint
+                    scale: 2, // Kualitas HD 2x lipat
                     useCORS: true,
                     backgroundColor: "#ffffff",
                     logging: false
                 });
 
-                // Ubah ke format JPG
+                // Ekstrak canvas ke Base64 (JPG)
                 const imageData = canvas.toDataURL("image/jpeg", 1.0);
                 
-                // Ambil Nama & Matkul untuk penamaan file otomatis
+                // Buat nama file yang rapi
+                const kegiatan = document.getElementById('covJenisLaporan').value || 'TUGAS';
                 const nama = document.getElementById('covNama').value || 'Mahasiswa';
-                const matkul = document.getElementById('covMatkul').value || 'Praktikum';
+                const matkul = document.getElementById('covMatkul').value || 'Kuliah';
                 
-                // Trigger Download
+                // Proses pemicuan unduh file otomatis
                 const link = document.createElement("a");
                 link.href = imageData;
-                link.download = `Cover_${matkul.replace(/\s+/g, '_')}_${nama.replace(/\s+/g, '_')}.jpg`;
+                link.download = `Cover_${kegiatan}_${matkul.replace(/\s+/g, '_')}_${nama.replace(/\s+/g, '_')}.jpg`;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
                 
             } catch (error) {
                 console.error("Gagal mendownload cover:", error);
-                alert("Maaf, terjadi kesalahan saat memproses gambar.");
+                alert("Maaf, terjadi kesalahan saat mengekspor gambar.");
             } finally {
-                // Kembalikan state tombol
+                // Kembalikan tombol ke kondisi semula
                 btnDownload.innerHTML = originalText;
                 btnDownload.disabled = false;
             }

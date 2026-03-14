@@ -429,8 +429,16 @@ if(!token){
                     </h3>
                     
                     <div class="form-group" style="margin-bottom: 12px;">
-                        <label>Judul Cover</label>
-                        <input type="text" id="covJudul" class="form-control" placeholder="PRAKTIKUM PEMROGRAMAN WEB">
+                        <label>Jenis Kegiatan</label>
+                        <select id="covJenisLaporan" class="form-control">
+                            <option value="PRAKTIKUM">PRAKTIKUM</option>
+                            <option value="TUGAS">TUGAS</option>
+                            <option value="EVALUASI">EVALUASI</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 12px;">
+                        <label>Deskripsi / Mata Kuliah</label>
+                        <input type="text" id="covJudul" class="form-control" placeholder="Contoh: PEMROGRAMAN WEB">
                     </div>
                     <div class="form-group" style="margin-bottom: 12px;">
                         <label>Nama Mahasiswa</label>
@@ -474,9 +482,12 @@ if(!token){
 
                 <div class="card-box" style="margin-bottom: 0; background: #e2e8f0; display: flex; justify-content: center; overflow-x: auto; padding: 40px 20px;">
                     <div id="kertasPreview" class="kertas-a4">
-                        <img src="img/Cover_TugasPraktikum.jpg" class="kertas-bg" alt="Template">
+                        <img src="img/cover-template.png" class="kertas-bg" alt="Template">
                         
-                        <div class="text-overlay title-box" id="prevJudul">PRAKTIKUM PEMROGRAMAN WEB</div>
+                        <div class="text-overlay title-box">
+                            <div id="prevJenisLaporan" class="title-main">PRAKTIKUM</div>
+                            <div id="prevJudul" class="title-sub">PEMROGRAMAN WEB</div>
+                        </div>
 
                         <div class="text-overlay detail-box">
                             <div class="detail-grid">
