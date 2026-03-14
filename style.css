@@ -426,11 +426,29 @@ right:auto;
 }
 .detail-flex-row.group-row .val {
     display: flex; justify-content: space-between; align-items: center;
-    padding-left: 0 !important; padding-right: 0 !important; overflow: visible; 
+    padding-left: 0 !important; padding-right: 0 !important;
+    
+    /* Menarik batas tulisan ke luar sebanyak 2px ke kiri dan kanan */
+    margin-left: -2px;
+    margin-right: -2px;
+    
+    overflow: visible; 
 }
-.group-row .member-name { flex: 1; text-align: left; overflow: hidden; }
-.group-row .separator { width: 20px; text-align: center; font-weight: 800; }
-.group-row .member-nrp { width: 100px; text-align: right; overflow: hidden; flex-shrink: 0; }
-
-/* WADAH RESIZE FONT */
-.resize-text { white-space: nowrap; display: inline-block; }
+.group-row .member-name { 
+    flex: 1; 
+    text-align: left; 
+    overflow: hidden; 
+}
+.group-row .separator { 
+    width: 20px; 
+    text-align: center; 
+    font-weight: 800; 
+}
+.group-row .member-nrp { 
+    /* Mengurangi area jatah NRP dari 100px menjadi 85px. 
+       Ini otomatis memberikan sisa ruangnya ke area NAMA */
+    width: 85px; 
+    text-align: right; 
+    overflow: hidden; 
+    flex-shrink: 0; 
+}

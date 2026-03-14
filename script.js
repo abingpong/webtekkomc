@@ -1737,7 +1737,7 @@ document.addEventListener('DOMContentLoaded', () => {
             prevIndividuNama.style.display = 'flex'; prevIndividuNrp.style.display = 'flex';
             prevKelompok.style.display = 'none';
             
-            if (imgTemplate) imgTemplate.src = 'img/Cover TugasPraktikum.jpg';
+            if (imgTemplate) imgTemplate.src = 'img/cover-template.png';
         });
 
         btnKelompok.addEventListener('click', () => {
@@ -1748,7 +1748,7 @@ document.addEventListener('DOMContentLoaded', () => {
             prevIndividuNama.style.display = 'none'; prevIndividuNrp.style.display = 'none';
             prevKelompok.style.display = 'flex';
             
-            if (imgTemplate) imgTemplate.src = 'img/COVER KELOMPOK.png';
+            if (imgTemplate) imgTemplate.src = 'img/cover-kelompok.png';
             if (listAnggota.children.length === 0) tambahBarisAnggota();
             
             // Timeout kecil agar DOM selesai merender display:flex sebelum kalkulasi width
