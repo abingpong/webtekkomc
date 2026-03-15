@@ -1797,7 +1797,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Jalankan otomatis setiap kali layar HP dimiringkan atau browser ditarik
     window.addEventListener('resize', sesuaikanSkalaKertas);
 
-    // --- DOWNLOAD ---
+// --- DOWNLOAD (MULTI-FORMAT: JPG, PNG, PDF) ---
     const btnDownload = document.getElementById('btnDownloadCover');
     if (btnDownload) {
         btnDownload.addEventListener('click', async () => {
@@ -1805,24 +1805,60 @@ document.addEventListener('DOMContentLoaded', () => {
             btnDownload.innerHTML = `<i class='bx bx-loader-alt bx-spin'></i> Memproses...`;
             btnDownload.disabled = true;
 
+            // Ambil format yang dipilih user (jpg, png, atau pdf)
+            const elemenFormat = document.getElementById('formatDownload');
+            const formatPilihan = elemenFormat ? elemenFormat.value : 'jpg';
+
             try {
+                // 1. Ubah Kertas HTML menjadi Canvas (Gambar Resolusi Tinggi)
                 const canvas = await html2canvas(document.getElementById('kertasPreview'), {
-                    scale: 2, useCORS: true, backgroundColor: "#ffffff", logging: false
+                    scale: 2, // Resolusi HD
+                    useCORS: true, 
+                    backgroundColor: "#ffffff", 
+                    logging: false
                 });
 
-                const imageData = canvas.toDataURL("image/jpeg", 1.0);
+                // Siapkan penamaan file otomatis
                 const kegiatan = document.getElementById('covJenisLaporan').value || 'TUGAS';
                 const matkul = document.getElementById('covMatkul').value || 'Kuliah';
                 let penanda = modeSekarang === 'individu' ? (document.getElementById('covNama').value || 'Mahasiswa') : 'Kelompok';
-                
-                const link = document.createElement("a"); link.href = imageData;
-                link.download = `Cover_${modeSekarang}_${kegiatan}_${matkul.replace(/\s+/g, '_')}_${penanda.replace(/\s+/g, '_')}.jpg`;
-                document.body.appendChild(link); link.click(); document.body.removeChild(link);
+                let namaFileDasar = `Cover_${modeSekarang}_${kegiatan}_${matkul.replace(/\s+/g, '_')}_${penanda.replace(/\s+/g, '_')}`;
+
+                if (formatPilihan === 'pdf') {
+                    // 2A. JIKA PDF: Masukkan gambar kanvas ke dalam dokumen PDF ukuran A4
+                    const { jsPDF } = window.jspdf;
+                    const pdf = new jsPDF('p', 'mm', 'a4'); // p = portrait, mm = milimeter, a4 = ukuran kertas
+                    
+                    const imgData = canvas.toDataURL("image/jpeg", 1.0);
+                    
+                    // Hitung dimensi agar pas di kertas A4 (210mm x 297mm)
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+                    
+                    pdf.addImage(imgData, 'JPEG', 0, 0, pdfWidth, pdfHeight);
+                    pdf.save(`${namaFileDasar}.pdf`);
+
+                } else {
+                    // 2B. JIKA JPG / PNG: Langsung unduh sebagai gambar
+                    const mimeType = formatPilihan === 'png' ? 'image/png' : 'image/jpeg';
+                    const ekstensi = formatPilihan === 'png' ? 'png' : 'jpg';
+                    const imgData = canvas.toDataURL(mimeType, 1.0);
+                    
+                    const link = document.createElement("a"); 
+                    link.href = imgData;
+                    link.download = `${namaFileDasar}.${ekstensi}`;
+                    document.body.appendChild(link); 
+                    link.click(); 
+                    document.body.removeChild(link);
+                }
+
             } catch (error) {
                 console.error("Gagal mendownload cover:", error);
-                alert("Maaf, terjadi kesalahan saat memproses gambar.");
+                alert("Maaf, terjadi kesalahan saat memproses file. Pastikan internet stabil.");
             } finally {
-                btnDownload.innerHTML = originalText; btnDownload.disabled = false;
+                // Kembalikan tombol seperti semula
+                btnDownload.innerHTML = originalText; 
+                btnDownload.disabled = false;
             }
         });
     }
