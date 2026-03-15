@@ -1763,32 +1763,38 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- FUNGSI RESPONSIVE KERTAS (ANTI GEPENG & ANTI SPACE KOSONG) ---
+    // --- FUNGSI RESPONSIVE KERTAS (ANTI BUG KECIL & ANTI GEPENG) ---
     function sesuaikanSkalaKertas() {
         const container = document.getElementById('kertasContainer');
         const wrapper = document.getElementById('scaleWrapper');
         if (!container || !wrapper) return;
 
-        // Hitung lebar layar yang tersedia (dikurangi padding container 40px)
+        // Hitung lebar layar yang tersedia di dalam kotak abu-abu (dikurangi padding 40px)
         let availableWidth = container.clientWidth - 40;
         
-        // Cari rasio skalanya (794 adalah ukuran asli kertas A4)
+        // Celah keamanan: Jika browser belum siap dan membaca lebar di bawah 100px, pakai lebar layar asli sementara
+        if (availableWidth < 100) availableWidth = window.innerWidth - 80;
+        
+        // Cari rasio skalanya (794 adalah ukuran asli lebar kertas A4)
         let scale = availableWidth / 794;
         
-        // Batasi skala maksimal agar di layar PC/Laptop tidak terlalu raksasa
-        if (scale > 0.8) scale = 0.8; 
+        // Batasi skala maksimal di Laptop/PC agar tidak menabrak layar (misal batas 0.85)
+        if (scale > 0.85) scale = 0.85; 
 
         // Terapkan Zoom / Scale ke bungkusnya
         wrapper.style.transform = `scale(${scale})`;
         
-        // POTONG SPACE KOSONG SECARA MATEMATIS!
+        // Potong space kosong secara matematis agar pas dengan tinggi hasil zoom
         wrapper.style.height = `${1123 * scale}px`; 
     }
 
-    // Jalankan fungsi ini saat pertama kali web dibuka
-    sesuaikanSkalaKertas();
+    // Panggil fungsi dengan sedikit jeda (100 milidetik) agar CSS selesai menggambar layout
+    setTimeout(sesuaikanSkalaKertas, 100);
     
-    // Jalankan lagi otomatis setiap kali layar HP dimiringkan atau browser ditarik
+    // Pastikan fungsi jalan lagi kalau gambar sudah termuat sempurna
+    window.addEventListener('load', sesuaikanSkalaKertas);
+    
+    // Jalankan otomatis setiap kali layar HP dimiringkan atau browser ditarik
     window.addEventListener('resize', sesuaikanSkalaKertas);
 
     // --- DOWNLOAD ---

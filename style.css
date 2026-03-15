@@ -383,8 +383,29 @@ right:auto;
 /* ==========================================
    STYLING CANVAS COVER TUGAS (FINAL)
 ========================================== */
-.cover-layout { transition: all 0.3s ease; }
-@media (max-width: 992px) { .cover-layout { grid-template-columns: 1fr !important; } }
+/* PENGATURAN GRID RESPONSIF YANG BENAR */
+.cover-layout {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 30px;
+    align-items: start;
+    transition: all 0.3s ease;
+}
+
+/* Jika layar mengecil (HP / Tablet), susun ke bawah bukan ke samping! */
+@media (max-width: 992px) {
+    .cover-layout {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Pastikan wadah scale berpusat di atas */
+#scaleWrapper {
+    transform-origin: top center;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
 
 .kertas-a4 {
     width: 794px !important; 
