@@ -1763,38 +1763,31 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- FUNGSI RESPONSIVE KERTAS (ANTI BUG KECIL & ANTI GEPENG) ---
+// --- FUNGSI RESPONSIVE KERTAS (ANTI BUG KIRI BAWAH & TENGAH PRESISI) ---
     function sesuaikanSkalaKertas() {
         const container = document.getElementById('kertasContainer');
         const wrapper = document.getElementById('scaleWrapper');
-        if (!container || !wrapper) return;
+        const kertas = document.getElementById('kertasPreview'); // Targetkan kertasnya langsung
+        if (!container || !wrapper || !kertas) return;
 
-        // Hitung lebar layar yang tersedia di dalam kotak abu-abu (dikurangi padding 40px)
         let availableWidth = container.clientWidth - 40;
-        
-        // Celah keamanan: Jika browser belum siap dan membaca lebar di bawah 100px, pakai lebar layar asli sementara
         if (availableWidth < 100) availableWidth = window.innerWidth - 80;
         
-        // Cari rasio skalanya (794 adalah ukuran asli lebar kertas A4)
         let scale = availableWidth / 794;
-        
-        // Batasi skala maksimal di Laptop/PC agar tidak menabrak layar (misal batas 0.85)
-        if (scale > 0.85) scale = 0.85; 
+        if (scale > 0.85) scale = 0.85; // Batas zoom maksimal di PC
 
-        // Terapkan Zoom / Scale ke bungkusnya
-        wrapper.style.transform = `scale(${scale})`;
+        // 1. Terapkan Zoom langsung ke kertasnya dari titik kiri atas
+        kertas.style.transform = `scale(${scale})`;
+        kertas.style.transformOrigin = 'top left'; 
         
-        // Potong space kosong secara matematis agar pas dengan tinggi hasil zoom
+        // 2. Bungkusnya (wrapper) diubah ukurannya agar memeluk kertas dengan pas!
+        wrapper.style.width = `${794 * scale}px`;
         wrapper.style.height = `${1123 * scale}px`; 
+        wrapper.style.display = 'block';
     }
 
-    // Panggil fungsi dengan sedikit jeda (100 milidetik) agar CSS selesai menggambar layout
     setTimeout(sesuaikanSkalaKertas, 100);
-    
-    // Pastikan fungsi jalan lagi kalau gambar sudah termuat sempurna
     window.addEventListener('load', sesuaikanSkalaKertas);
-    
-    // Jalankan otomatis setiap kali layar HP dimiringkan atau browser ditarik
     window.addEventListener('resize', sesuaikanSkalaKertas);
 
 // --- DOWNLOAD (MULTI-FORMAT: JPG, PNG, PDF) ---

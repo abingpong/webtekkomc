@@ -392,13 +392,16 @@ right:auto;
     transition: all 0.3s ease;
 }
 
-/* KHUSUS LAYAR HP & TABLET: Susun ke bawah, pastikan lebar 100% */
+/* KHUSUS LAYAR HP & TABLET: Susun ke bawah dengan jarak lega */
 @media (max-width: 992px) {
     .cover-layout {
         display: flex !important;
         flex-direction: column !important;
         width: 100% !important;
         overflow-x: hidden;
+        
+        /* INI KUNCI AGAR TIDAK MEPET DENGAN TOMBOL DOWNLOAD */
+        gap: 40px !important; 
     }
     .card-box {
         width: 100% !important;
