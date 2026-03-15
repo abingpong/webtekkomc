@@ -411,99 +411,97 @@ if(!token){
             </div>
         </div>
     
-               <div id="cover" class="view-section">
-            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; flex-wrap: wrap; gap: 10px;">
-                <div>
-                    <h2 style="font-size: 26px; font-weight: 700; margin-bottom: 6px;">Pembuat Cover Tugas</h2>
-                    <p style="color: var(--text-muted); font-weight: 500;">Isi form di kiri, preview akan otomatis menyesuaikan.</p>
+<div id="cover" class="view-section">
+    <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; flex-wrap: wrap; gap: 10px;">
+        <div>
+            <h2 style="font-size: 26px; font-weight: 700; margin-bottom: 6px;">Pembuat Cover Tugas</h2>
+            <p style="color: var(--text-muted); font-weight: 500;">Isi form di kiri, preview akan otomatis menyesuaikan.</p>
+        </div>
+        <div style="display: flex; gap: 8px; background: var(--surface); padding: 4px; border-radius: 12px; border: 1px solid var(--border);">
+            <button id="btnModeIndividu" class="btn btn-primary" style="padding: 8px 16px;">Individu</button>
+            <button id="btnModeKelompok" class="btn btn-outline" style="padding: 8px 16px; border: none;">Kelompok</button>
+        </div>
+    </div>
+
+    <div class="cover-layout">
+        
+        <div class="card-box" style="margin-bottom: 0; position: sticky; top: 20px;">
+            <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                <i class='bx bx-edit' style="color: var(--primary); font-size: 22px;"></i> Detail Praktikum
+            </h3>
+            
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label>Jenis Kegiatan</label>
+                <select id="covJenisLaporan" class="form-control">
+                    <option value="PRAKTIKUM">PRAKTIKUM</option>
+                    <option value="TUGAS">TUGAS</option>
+                    <option value="EVALUASI">EVALUASI</option>
+                </select>
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label>Deskripsi / Mata Kuliah</label>
+                <input type="text" id="covJudul" class="form-control" placeholder="Contoh: PEMROGRAMAN WEB">
+            </div>
+
+            <div id="formIndividuOnly">
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label>Nama Mahasiswa</label>
+                    <input type="text" id="covNama" class="form-control" placeholder="Masukkan nama">
                 </div>
-                <div style="display: flex; gap: 8px; background: var(--surface); padding: 4px; border-radius: 12px; border: 1px solid var(--border);">
-                    <button id="btnModeIndividu" class="btn btn-primary" style="padding: 8px 16px;">Individu</button>
-                    <button id="btnModeKelompok" class="btn btn-outline" style="padding: 8px 16px; border: none;">Kelompok</button>
+                <div class="form-group" style="margin-bottom: 12px;">
+                    <label>NRP</label>
+                    <input type="text" id="covNrp" class="form-control" placeholder="Masukkan NRP">
                 </div>
             </div>
 
-            <div class="cover-layout">
+            <div id="formKelompokOnly" style="display: none; margin-bottom: 12px;">
+                <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text-muted);">Anggota Kelompok</label>
+                <div id="listAnggotaKelompok" style="display: flex; flex-direction: column; gap: 8px;">
+                </div>
+                <button type="button" id="btnTambahAnggota" class="btn btn-outline" style="width: 100%; font-size: 13px; padding: 8px; margin-top: 8px;">
+                    <i class='bx bx-plus'></i> Tambah Anggota
+                </button>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label>Kelas</label>
+                <input type="text" id="covKelas" class="form-control" value="1 D4 Teknik Komputer C" placeholder="Kelas">
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label>Mata Kuliah</label>
+                <input type="text" id="covMatkul" class="form-control" placeholder="Contoh: Pemrograman Web">
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label>Dosen Pengampu</label>
+                <input type="text" id="covDosen" class="form-control" placeholder="Nama Dosen">
+            </div>
+            <div class="form-group" style="margin-bottom: 12px;">
+                <label>Asisten Lab</label>
+                <input type="text" id="covAsisten" class="form-control" placeholder="Nama Asisten (Opsional)">
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>Hari</label>
+                    <input type="text" id="covHari" class="form-control" placeholder="Contoh: Senin">
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <label>Tgl Praktikum</label>
+                    <input type="text" id="covTgl" class="form-control" placeholder="14 Maret 2026">
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 8px; align-items: center; margin-top: 10px;">
+                <select id="formatDownload" class="form-control" style="width: auto; padding: 10px; font-weight: 600;">
+                    <option value="jpg">JPG</option>
+                    <option value="png">PNG</option>
+                    <option value="pdf">PDF</option>
+                </select>
                 
-                <div class="card-box" style="margin-bottom: 0; position: sticky; top: 20px;">
-                    <h3 style="font-size: 16px; font-weight: 800; margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
-                        <i class='bx bx-edit' style="color: var(--primary); font-size: 22px;"></i> Detail Praktikum
-                    </h3>
-                    
-                    <div class="form-group" style="margin-bottom: 12px;">
-                        <label>Jenis Kegiatan</label>
-                        <select id="covJenisLaporan" class="form-control">
-                            <option value="PRAKTIKUM">PRAKTIKUM</option>
-                            <option value="TUGAS">TUGAS</option>
-                            <option value="EVALUASI">EVALUASI</option>
-                        </select>
-                    </div>
-                    <div class="form-group" style="margin-bottom: 12px;">
-                        <label>Deskripsi / Mata Kuliah</label>
-                        <input type="text" id="covJudul" class="form-control" placeholder="Contoh: PEMROGRAMAN WEB">
-                    </div>
-
-                    <div id="formIndividuOnly">
-                        <div class="form-group" style="margin-bottom: 12px;">
-                            <label>Nama Mahasiswa</label>
-                            <input type="text" id="covNama" class="form-control" placeholder="Masukkan nama">
-                        </div>
-                        <div class="form-group" style="margin-bottom: 12px;">
-                            <label>NRP</label>
-                            <input type="text" id="covNrp" class="form-control" placeholder="Masukkan NRP">
-                        </div>
-                    </div>
-
-                    <div id="formKelompokOnly" style="display: none; margin-bottom: 12px;">
-                        <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--text-muted);">Anggota Kelompok</label>
-                        <div id="listAnggotaKelompok" style="display: flex; flex-direction: column; gap: 8px;">
-                            </div>
-                        <button type="button" id="btnTambahAnggota" class="btn btn-outline" style="width: 100%; font-size: 13px; padding: 8px; margin-top: 8px;">
-                            <i class='bx bx-plus'></i> Tambah Anggota
-                        </button>
-                    </div>
-
-                    <div class="form-group" style="margin-bottom: 12px;">
-                        <label>Kelas</label>
-                        <input type="text" id="covKelas" class="form-control" value="1 D4 Teknik Komputer C" placeholder="Kelas">
-                    </div>
-                    <div class="form-group" style="margin-bottom: 12px;">
-                        <label>Mata Kuliah</label>
-                        <input type="text" id="covMatkul" class="form-control" placeholder="Contoh: Pemrograman Web">
-                    </div>
-                    <div class="form-group" style="margin-bottom: 12px;">
-                        <label>Dosen Pengampu</label>
-                        <input type="text" id="covDosen" class="form-control" placeholder="Nama Dosen">
-                    </div>
-                    <div class="form-group" style="margin-bottom: 12px;">
-                        <label>Asisten Lab</label>
-                        <input type="text" id="covAsisten" class="form-control" placeholder="Nama Asisten (Opsional)">
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px;">
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label>Hari</label>
-                            <input type="text" id="covHari" class="form-control" placeholder="Contoh: Senin">
-                        </div>
-                        <div class="form-group" style="margin-bottom: 0;">
-                            <label>Tgl Praktikum</label>
-                            <input type="text" id="covTgl" class="form-control" placeholder="14 Maret 2026">
-                        </div>
-                    </div>
-
-                        <div style="display: flex; gap: 8px; align-items: center; margin-top: 10px;">
-                        <select id="formatDownload" class="form-control" style="width: auto; padding: 10px; font-weight: 600;">
-                            <option value="jpg">JPG</option>
-                            <option value="png">PNG</option>
-                            <option value="pdf">PDF</option>
-                        </select>
-                        
-                        <button id="btnDownloadCover" class="btn btn-primary" style="flex: 1; font-size: 15px; padding: 12px;">
-                            <i class='bx bx-download'></i> Download
-                        </button>
-                    </div>
-
-                <div id="kertasContainer" class="card-box" style="margin-bottom: 0; background: #e2e8f0; display: flex; justify-content: center; padding: 40px 20px;">
-            
+                <button id="btnDownloadCover" class="btn btn-primary" style="flex: 1; font-size: 15px; padding: 12px;">
+                    <i class='bx bx-download'></i> Download
+                </button>
+            </div>
+        </div> <div id="kertasContainer" class="card-box" style="margin-bottom: 0; background: #e2e8f0; display: flex; justify-content: center; padding: 40px 20px;">
             <div id="scaleWrapper" style="transform-origin: top center;">
                 
                 <div id="kertasPreview" class="kertas-a4">
@@ -546,8 +544,10 @@ if(!token){
                     </div>
                 </div>
             </div>
-            </div>
         </div>
+        
+    </div>
+</div>
         <div id="anggota" class="view-section"><h2 style="margin-bottom:20px;">Anggota Kelas</h2><p class="subtitle">Segera hadir.</p></div>
         
         <div id="kas" class="view-section">
