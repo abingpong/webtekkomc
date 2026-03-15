@@ -392,10 +392,17 @@ right:auto;
     transition: all 0.3s ease;
 }
 
-/* Jika layar mengecil (HP / Tablet), susun ke bawah bukan ke samping! */
+/* KHUSUS LAYAR HP & TABLET: Susun ke bawah, pastikan lebar 100% */
 @media (max-width: 992px) {
     .cover-layout {
-        grid-template-columns: 1fr !important;
+        display: flex !important;
+        flex-direction: column !important;
+        width: 100% !important;
+        overflow-x: hidden;
+    }
+    .card-box {
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 }
 
@@ -461,12 +468,15 @@ right:auto;
 .detail-flex-row .val { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-align: left; }
 
 
+
 /* ==========================================
    PENGATURAN KHUSUS KELOMPOK
 ========================================== */
 #rowPrevKelompok {
-    display: flex !important; flex-direction: column !important;
-    width: 100%; gap: 5px 0; 
+    /* PASTIKAN TIDAK ADA KATA 'display' DI SINI */
+    flex-direction: column !important; 
+    width: 100%; 
+    gap: 5px 0; 
 }
 .detail-flex-row.group-row .val {
     display: flex; justify-content: space-between; align-items: center;
