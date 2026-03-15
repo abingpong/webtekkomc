@@ -381,27 +381,26 @@ right:auto;
 }
 
 /* ==========================================
-   STYLING CANVAS COVER TUGAS (FINAL)
+   STYLING GRID RESPONSIF COVER TUGAS (BUGFIX & ANTI MEPET)
 ========================================== */
-/* PENGATURAN GRID RESPONSIF YANG BENAR */
+
+/* Tata Letak Dasar PC/Laptop (Layar Lebar) */
 .cover-layout {
     display: grid;
-    grid-template-columns: 350px 1fr;
+    grid-template-columns: 350px 1fr; /* Form kiri, Preview kanan */
     gap: 30px;
     align-items: start;
     transition: all 0.3s ease;
 }
 
-/* KHUSUS LAYAR HP & TABLET: Susun ke bawah dengan jarak lega */
-@media (max-width: 992px) {
+/* KHUSUS LAYAR HP & TABLET: Susun ke bawah */
+/* Saya meningkatkan breakpoint menjadi 1200px karena screenshot desktop user terlihat sangat lebar */
+@media (max-width: 1200px) { 
     .cover-layout {
-        display: flex !important;
+        display: flex !important; /* Gunakan flex untuk penyusunan vertikal */
         flex-direction: column !important;
         width: 100% !important;
         overflow-x: hidden;
-        
-        /* INI KUNCI AGAR TIDAK MEPET DENGAN TOMBOL DOWNLOAD */
-        gap: 40px !important; 
     }
     .card-box {
         width: 100% !important;
@@ -409,6 +408,21 @@ right:auto;
     }
 }
 
+/* Saat mode zoom aktif (untuk HP) */
+.cover-layout.scale-active {
+    /* gap: 20px; <-- Jarak lama terlalu sempit untuk HP */
+    gap: 40px !important; /* Jarak baru yang jauh lebih lega untuk HP */
+}
+
+/* Penyesuaian Latar Belakang Mobile */
+@media (max-width: 1200px) { 
+    /* ... (Kode penyusunan vertikal flex) ... */
+
+    /* Tambahkan aturan untuk kontainer abu-abu ( preview ) di HP */
+    #kertasContainer {
+        padding: 20px !important; /* Kurangi padding untuk HP agar tidak terlalu gemuk */
+    }
+}
 /* Pastikan wadah scale berpusat di atas */
 #scaleWrapper {
     transform-origin: top center;
