@@ -384,43 +384,39 @@ right:auto;
    STYLING GRID RESPONSIF COVER TUGAS (BUGFIX & ANTI MEPET)
 ========================================== */
 
-/* Tata Letak Dasar PC/Laptop (Layar Lebar) */
+/* ==========================================
+   TATA LETAK UTAMA: DESKTOP (KIRI & KANAN)
+========================================== */
 .cover-layout {
-    display: grid;
-    grid-template-columns: 350px 1fr; /* Form kiri, Preview kanan */
+    display: grid !important;
+    /* Kiri 350px untuk form, kanan ambil sisa ruang (minmax mencegah layout jebol) */
+    grid-template-columns: 350px minmax(0, 1fr) !important; 
     gap: 30px;
     align-items: start;
-    transition: all 0.3s ease;
+    width: 100%;
 }
 
-/* KHUSUS LAYAR HP & TABLET: Susun ke bawah */
-/* Saya meningkatkan breakpoint menjadi 1200px karena screenshot desktop user terlihat sangat lebar */
-@media (max-width: 1200px) { 
+/* ==========================================
+   TATA LETAK: HP & TABLET (ATAS & BAWAH)
+========================================== */
+/* Batas 992px adalah standar ideal agar Laptop tetap Kanan-Kiri */
+@media (max-width: 992px) {
     .cover-layout {
-        display: flex !important; /* Gunakan flex untuk penyusunan vertikal */
+        display: flex !important;
         flex-direction: column !important;
-        width: 100% !important;
-        overflow-x: hidden;
+        
+        /* Jarak sangat lega (40px) antara form dan preview di HP */
+        gap: 40px !important; 
     }
+    
     .card-box {
         width: 100% !important;
         box-sizing: border-box !important;
     }
-}
-
-/* Saat mode zoom aktif (untuk HP) */
-.cover-layout.scale-active {
-    /* gap: 20px; <-- Jarak lama terlalu sempit untuk HP */
-    gap: 40px !important; /* Jarak baru yang jauh lebih lega untuk HP */
-}
-
-/* Penyesuaian Latar Belakang Mobile */
-@media (max-width: 1200px) { 
-    /* ... (Kode penyusunan vertikal flex) ... */
-
-    /* Tambahkan aturan untuk kontainer abu-abu ( preview ) di HP */
+    
+    /* Memangkas background abu-abu di HP agar tidak kelebaran */
     #kertasContainer {
-        padding: 20px !important; /* Kurangi padding untuk HP agar tidak terlalu gemuk */
+        padding: 20px 10px !important; 
     }
 }
 /* Pastikan wadah scale berpusat di atas */
