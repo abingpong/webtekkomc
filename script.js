@@ -694,7 +694,8 @@ function renderTasks() {
     if(!container) return;
     container.innerHTML = ''; 
     
-    let tasks = taskDatabase[currentActiveCourse] || [];
+    const courseKey = (currentActiveCourse || '').trim();
+    let tasks = taskDatabase[courseKey] || [];
     const now = new Date();
     let isDatabaseChanged = false; 
 
