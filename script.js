@@ -707,12 +707,14 @@ function renderTasks() {
     
     const courseKey = (currentActiveCourse || '').trim().toLowerCase();
 
-    const tasks = Object.keys(taskDatabase).reduce((acc, key) => {
-        if (key.trim().toLowerCase() === courseKey) {
-            return taskDatabase[key];
-        }
-        return acc;
-    }, []) || [];
+    let tasks = [];
+
+    for (const key in taskDatabase) {
+    if (key.trim().toLowerCase() === courseKey) {
+        tasks = taskDatabase[key];
+        break; // langsung berhenti saat ketemu
+    }
+}
     const now = new Date();
     let isDatabaseChanged = false; 
 
