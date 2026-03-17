@@ -314,7 +314,9 @@ window.switchCourseTab = (tabId, btnElement) => {
 
     // ✅ TAMBAHAN (TANPA MENGUBAH LOGIKA SEBELUMNYA)
     if (tabId === 'tugas' && typeof renderTasks === 'function') {
+    setTimeout(() => {
         renderTasks();
+    }, 50);
     }
 
     if (tabId === 'materi' && typeof renderModules === 'function') {
