@@ -314,7 +314,7 @@ const hasAccess = (role === "admin" || role === "pj");
 };
 
 window.openCourse = (courseName) => {
-    currentActiveCourse = courseName;
+    currentActiveCourse = courseName.trim();
     document.getElementById('course-list-view').style.display = 'none';
     document.getElementById('course-detail-view').style.display = 'block';
     document.getElementById('detailCourseTitle').innerText = courseName;
@@ -598,7 +598,7 @@ if(addTugasForm) {
 
         // ✅ AMBIL COURSE DARI MODAL (BUKAN GLOBAL)
         const modal = document.getElementById('addTugasModal');
-        const course = modal.dataset.course;
+        const course = modal.dataset.course.trim();
 
         // fallback safety (tanpa alert)
         if (!course) {
@@ -694,8 +694,14 @@ function renderTasks() {
     if(!container) return;
     container.innerHTML = ''; 
     
-    const courseKey = (currentActiveCourse || '').trim();
-    let tasks = taskDatabase[courseKey] || [];
+    const courseKey = (currentActiveCourse || '').trim().toLowerCase();
+
+    const tasks = Object.keys(taskDatabase).reduce((acc, key) => {
+        if (key.trim().toLowerCase() === courseKey) {
+            return taskDatabase[key];
+        }
+        return acc;
+    }, []) || [];
     const now = new Date();
     let isDatabaseChanged = false; 
 
