@@ -298,8 +298,8 @@ window.switchCourseTab = (tabId, btnElement) => {
     document.getElementById('tab-' + tabId).classList.add('active'); 
     btnElement.classList.add('active'); 
 
-const role = localStorage.getItem("user_role");
-const hasAccess = (role === "admin" || role === "pj");
+    const role = localStorage.getItem("user_role");
+    const hasAccess = (role === "admin" || role === "pj");
 
     const btnModul = document.getElementById('btnUploadModul');
     const btnTugas = document.getElementById('btnUploadTugas');
@@ -310,6 +310,15 @@ const hasAccess = (role === "admin" || role === "pj");
     if (hasAccess) {
         if (tabId === 'materi' && btnModul) btnModul.style.display = 'inline-flex';
         if (tabId === 'tugas' && btnTugas) btnTugas.style.display = 'inline-flex';
+    }
+
+    // ✅ TAMBAHAN (TANPA MENGUBAH LOGIKA SEBELUMNYA)
+    if (tabId === 'tugas' && typeof renderTasks === 'function') {
+        renderTasks();
+    }
+
+    if (tabId === 'materi' && typeof renderModules === 'function') {
+        renderModules();
     }
 };
 
