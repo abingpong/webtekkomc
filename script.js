@@ -344,7 +344,16 @@ window.closeCourse = () => { document.getElementById('course-list-view').style.d
 window.openAddModulModal = () => { closeSidebar(); document.getElementById('addModulModal').classList.add('active'); };
 window.closeAddModulModal = () => { document.getElementById('addModulModal').classList.remove('active'); document.getElementById('addModulForm').reset(); };
 
-window.openAddTugasModal = () => { closeSidebar(); document.getElementById('addTugasModal').classList.add('active'); };
+window.openAddTugasModal = () => {
+    closeSidebar();
+
+    const modal = document.getElementById('addTugasModal');
+
+    // ✅ SIMPAN COURSE KE MODAL
+    modal.dataset.course = currentActiveCourse;
+
+    modal.classList.add('active');
+};
 window.closeAddTugasModal = () => { document.getElementById('addTugasModal').classList.remove('active'); document.getElementById('addTugasForm').reset(); };
 
 window.changeMonth = (dir) => { currentMonth += dir; if(currentMonth > 11) { currentMonth = 0; currentYear++; } if(currentMonth < 0) { currentMonth = 11; currentYear--; } renderCalendar(); };
@@ -582,17 +591,24 @@ if(addModulForm) {
     });
 }
 
-// Event Submit Form Tambah Tugas
-// Event Submit Form Tambah Tugas
 const addTugasForm = document.getElementById('addTugasForm');
 if(addTugasForm) {
     addTugasForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-        
-        // Ambil semua nilai dari form
+
+        // ✅ AMBIL COURSE DARI MODAL (BUKAN GLOBAL)
+        const modal = document.getElementById('addTugasModal');
+        const course = modal.dataset.course;
+
+        // fallback safety (tanpa alert)
+        if (!course) {
+            console.error("Course tidak ditemukan");
+            return;
+        }
+
         const newTask = {
             title: document.getElementById('tugasTitle').value,
-            jenis: document.getElementById('tugasJenis').value, // <--- Data Baru
+            jenis: document.getElementById('tugasJenis').value,
             bentuk: document.getElementById('tugasBentuk').value,
             pengerjaan: document.getElementById('tugasPengerjaan').value,
             format: document.getElementById('tugasFormat').value,
@@ -600,12 +616,16 @@ if(addTugasForm) {
             deadline: document.getElementById('tugasDeadline').value,
             desc: document.getElementById('tugasDesc').value
         };
-        
-        if (!taskDatabase[currentActiveCourse]) taskDatabase[currentActiveCourse] = [];
-        taskDatabase[currentActiveCourse].push(newTask);
-        
+
+        // ✅ GUNAKAN course (bukan currentActiveCourse)
+        if (!taskDatabase[course]) taskDatabase[course] = [];
+        taskDatabase[course].push(newTask);
+
         window.closeAddTugasModal(); 
         await updateCloudData('tasks', taskDatabase, `Tugas Baru: ${newTask.title}`);
+
+        // ✅ FORCE RENDER
+        renderTasks();
     });
 }
 
@@ -681,6 +701,7 @@ function renderTasks() {
     // FILTER AUTO-DELETE TUGAS KADALUARSA
     const validTasks = tasks.filter(tsk => {
         const deadlineDate = new Date(tsk.deadline);
+        deadlineDate.setHours(23,59,59,999); // ✅ FIX: end of day
         if (now > deadlineDate) {
             isDatabaseChanged = true; 
             return false; 
