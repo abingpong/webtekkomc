@@ -475,11 +475,12 @@ right:auto;
 /* KEMBALIKAN LABEL AGAR SEMUA TITIK DUA SEJAJAR LURUS */
 .detail-flex-row {
     display: flex; align-items: center; width: 100%; font-weight: 700;
-    text-transform: uppercase; font-size: 20px; /* Increased from 15px to 20px */
+    text-transform: uppercase; font-size: 17px; /* Reduced from 20px to fit vertically */
+    line-height: 1.1;
 }
 .detail-flex-row .lbl { 
     font-weight: 800; 
-    width: 160px; /* Increased slightly to fit larger text */
+    width: 140px; /* Reverted to 140px to fix offset 'kelas' */
     flex-shrink: 0; 
 }
 .detail-flex-row .titik { width: 15px; text-align: center; flex-shrink: 0; }
