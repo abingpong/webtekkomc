@@ -475,11 +475,11 @@ right:auto;
 /* KEMBALIKAN LABEL AGAR SEMUA TITIK DUA SEJAJAR LURUS */
 .detail-flex-row {
     display: flex; align-items: center; width: 100%; font-weight: 700;
-    text-transform: uppercase; font-size: 15px; 
+    text-transform: uppercase; font-size: 20px; /* Increased from 15px to 20px */
 }
 .detail-flex-row .lbl { 
     font-weight: 800; 
-    width: 140px; /* Pastikan semua label ukurannya sama agar titik dua rata */
+    width: 160px; /* Increased slightly to fit larger text */
     flex-shrink: 0; 
 }
 .detail-flex-row .titik { width: 15px; text-align: center; flex-shrink: 0; }
@@ -497,26 +497,25 @@ right:auto;
     gap: 5px 0; 
 }
 .detail-flex-row.group-row .val {
-    display: flex; justify-content: space-between; align-items: center;
+    display: flex; justify-content: center; align-items: center; gap: 8px;
     padding-left: 10px !important; /* Sedikit jarak dari titik dua */
     padding-right: 0 !important; 
     overflow: visible; 
 }
 .group-row .member-name { 
-    flex: 1; 
-    text-align: left; 
+    max-width: 65%;
+    text-align: center; 
     overflow: hidden; 
 }
 .group-row .separator { 
-    width: 20px; 
+    padding: 0 8px;
     text-align: center; 
     font-weight: 800; 
 }
 .group-row .member-nrp { 
-    width: 85px; /* Jatah NRP dibuat presisi agar sisa ruang dikasih ke Nama */
-    text-align: right; 
+    max-width: 35%;
+    text-align: center; 
     overflow: hidden; 
-    flex-shrink: 0; 
 }
 
 /* WADAH RESIZE FONT AGAR TIDAK MENGHILANG */

@@ -1689,14 +1689,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const fallbackText = prevEl.innerText; 
             const eventType = inputEl.tagName === 'SELECT' ? 'change' : 'input';
             
-            let ukuranDefault = 15; 
-            if (inputId === 'covJudul') ukuranDefault = 16;
+            let ukuranDefault = 20; 
+            if (inputId === 'covJudul') ukuranDefault = 22;
             if (inputId === 'covJenisLaporan') ukuranDefault = 28;
 
             inputEl.addEventListener(eventType, (e) => {
                 prevEl.innerText = e.target.value.trim() || fallbackText;
                 adjustFontSize(prevEl, ukuranDefault, 9);
             });
+            setTimeout(() => adjustFontSize(prevEl, ukuranDefault, 9), 150);
         }
     }
 
@@ -1704,13 +1705,16 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('covNama')?.addEventListener('input', (e) => {
         const el = document.getElementById('prevNama');
         el.innerText = e.target.value.trim() || 'Nama Mahasiswa';
-        adjustFontSize(el, 15, 9);
+        adjustFontSize(el, 20, 9);
     });
+    setTimeout(() => adjustFontSize(document.getElementById('prevNama'), 20, 9), 150);
+
     document.getElementById('covNrp')?.addEventListener('input', (e) => {
         const el = document.getElementById('prevNrp');
         el.innerText = e.target.value.trim() || '1234567890';
-        adjustFontSize(el, 15, 9);
+        adjustFontSize(el, 20, 9);
     });
+    setTimeout(() => adjustFontSize(document.getElementById('prevNrp'), 20, 9), 150);
 
     // --- RENDER PREVIEW KELOMPOK ---
     function renderPreviewKelompok() {
@@ -1718,6 +1722,11 @@ document.addEventListener('DOMContentLoaded', () => {
         prevKelompok.innerHTML = ''; 
         
         const barisanForm = listAnggota.querySelectorAll('.kel-row');
+        const count = barisanForm.length;
+        let baseKelompokSize = 20;
+        if (count > 3) baseKelompokSize = Math.max(12, 20 - (count - 3) * 2);
+        prevKelompok.style.gap = count > 3 ? (count > 5 ? '1px 0' : '3px 0') : '5px 0';
+
         barisanForm.forEach((row, index) => {
             const nama = row.querySelector('.kel-nama').value.trim() || 'Nama Anggota';
             const nrp = row.querySelector('.kel-nrp').value.trim() || 'NRP';
@@ -1740,8 +1749,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const wadahNrp = divRow.querySelector('.member-nrp');
             const spanNrp = divRow.querySelector('.member-nrp .resize-text');
             
-            adjustFontSizeKelompok(wadahNama, spanNama, 15, 9); 
-            adjustFontSizeKelompok(wadahNrp, spanNrp, 15, 9); 
+            adjustFontSizeKelompok(wadahNama, spanNama, baseKelompokSize, 9); 
+            adjustFontSizeKelompok(wadahNrp, spanNrp, baseKelompokSize, 9); 
         });
     }
 
