@@ -1689,7 +1689,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const fallbackText = prevEl.innerText; 
             const eventType = inputEl.tagName === 'SELECT' ? 'change' : 'input';
             
-            let ukuranDefault = 17; 
+            let ukuranDefault = 18.5; 
             if (inputId === 'covJudul') ukuranDefault = 22;
             if (inputId === 'covJenisLaporan') ukuranDefault = 28;
 
@@ -1705,16 +1705,16 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('covNama')?.addEventListener('input', (e) => {
         const el = document.getElementById('prevNama');
         el.innerText = e.target.value.trim() || 'Nama Mahasiswa';
-        adjustFontSize(el, 17, 9);
+        adjustFontSize(el, 18.5, 9);
     });
-    setTimeout(() => adjustFontSize(document.getElementById('prevNama'), 17, 9), 150);
+    setTimeout(() => adjustFontSize(document.getElementById('prevNama'), 18.5, 9), 150);
 
     document.getElementById('covNrp')?.addEventListener('input', (e) => {
         const el = document.getElementById('prevNrp');
         el.innerText = e.target.value.trim() || '1234567890';
-        adjustFontSize(el, 17, 9);
+        adjustFontSize(el, 18.5, 9);
     });
-    setTimeout(() => adjustFontSize(document.getElementById('prevNrp'), 17, 9), 150);
+    setTimeout(() => adjustFontSize(document.getElementById('prevNrp'), 18.5, 9), 150);
 
     // --- RENDER PREVIEW KELOMPOK ---
     function renderPreviewKelompok() {
@@ -1723,8 +1723,8 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const barisanForm = listAnggota.querySelectorAll('.kel-row');
         const count = barisanForm.length;
-        let baseKelompokSize = 17;
-        if (count > 2) baseKelompokSize = Math.max(11, 17 - (count - 2) * 1.5);
+        let baseKelompokSize = 18.5;
+        if (count > 2) baseKelompokSize = Math.max(12, 18.5 - (count - 2) * 1.5);
         prevKelompok.style.gap = count > 2 ? (count > 4 ? '1px 0' : '3px 0') : '5px 0';
 
         // Auto-shrink global detail-box gap if many members to prevent vertical overflow

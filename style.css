@@ -475,7 +475,7 @@ right:auto;
 /* KEMBALIKAN LABEL AGAR SEMUA TITIK DUA SEJAJAR LURUS */
 .detail-flex-row {
     display: flex; align-items: center; width: 100%; font-weight: 700;
-    text-transform: uppercase; font-size: 17px; /* Reduced from 20px to fit vertically */
+    text-transform: uppercase; font-size: 18.5px; /* Increased from 17px to fill bottom space */
     line-height: 1.1;
 }
 .detail-flex-row .lbl { 
