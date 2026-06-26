@@ -639,6 +639,12 @@ if(!token){
                         </div>
                     </div>
                     
+                    <div style="padding: 10px 20px; background: var(--surface-hover); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border);">
+                        <button id="btnKasPrev" style="padding: 6px 12px; font-size: 12px; cursor: pointer; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text-main);" onclick="prevKasPage()"><i class='bx bx-chevron-left'></i> Sebelumnya</button>
+                        <span id="kasPageIndicator" style="font-size: 13px; font-weight: 600; color: var(--text-muted);">Bulan 1 - 2</span>
+                        <button id="btnKasNext" style="padding: 6px 12px; font-size: 12px; cursor: pointer; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text-main);" onclick="nextKasPage()">Selanjutnya <i class='bx bx-chevron-right'></i></button>
+                    </div>
+                    
                     <div style="overflow-x: auto; max-height: 500px; overflow-y: auto;">
                         <table style="width: 100%; border-collapse: separate; border-spacing: 0; min-width: 900px; text-align: center; font-size: 13px;">
                             <thead id="table-kas-minggu-head" style="position: sticky; top: 0; z-index: 10;"></thead>

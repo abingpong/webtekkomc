@@ -895,6 +895,48 @@ window.renderKas = () => {
     if(document.getElementById('kas-next-date')) document.getElementById('kas-next-date').innerText = tglTagihan;
 };
 
+let currentKasPage = 0;
+const KAS_COLS_PER_PAGE = 4;
+
+window.prevKasPage = () => {
+    if (currentKasPage > 0) {
+        currentKasPage--;
+        window.renderTabelMingguan();
+    }
+};
+
+window.nextKasPage = () => {
+    let maxPage = Math.ceil(kasHeaders.length / KAS_COLS_PER_PAGE) - 1;
+    if (currentKasPage < maxPage) {
+        currentKasPage++;
+        window.renderTabelMingguan();
+    }
+};
+
+window.editKasHeader = async (idx) => {
+    let oldName = kasHeaders[idx];
+    let newName = prompt(`Ubah nama kolom untuk "${oldName}"\n(Isi "LIBUR SMT" jika ingin diabaikan dari tagihan)`, oldName);
+    
+    if (newName && newName.trim() !== "" && newName !== oldName) {
+        let confirmed = confirm(`Anda yakin mengubah nama kolom dari "${oldName}" menjadi "${newName}"?`);
+        if (confirmed) {
+            kasHeaders[idx] = newName.trim();
+            try {
+                const { updateDoc } = await import("https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js");
+                await updateDoc(portalDocRef, { kas_headers: kasHeaders });
+                alert("Berhasil mengubah nama kolom!");
+                // Trigger full refresh if needed, but normally onSnapshot handles it, 
+                // However, we just call renderKasKelasData locally:
+                window.renderKasMingguan && window.renderKasMingguan();
+                window.renderTabelMingguan();
+                window.renderKasAnda && window.renderKasAnda();
+            } catch (error) {
+                alert("Gagal mengubah: " + error.message);
+            }
+        }
+    }
+};
+
 window.renderTabelMingguan = () => {
     const thead = document.getElementById('table-kas-minggu-head');
     const tbody = document.getElementById('table-kas-minggu-body');
@@ -904,39 +946,62 @@ window.renderTabelMingguan = () => {
         "Fernando Brillian Arisando": "3225600061", "Dzaka Zidane Atha Ariq Sasmita": "3225600062", "Mishbahul Ayubi": "3225600063", "Meyco Neyla Pristya Ramadhani": "3225600064", "Muhammad Adhitya Ramadhani": "3225600065", "Risnan Ahmad Januar": "3225600066", "Varel Bambang Mirzandi": "3225600067", "Aqil Nawawi": "3225600068", "Rizko Prima Arfianto": "3225600069", "Muhammad Ihsan Rijadin": "3225600070", "Bima Aji Ramadhan Bayu Susanto": "3225600071", "Moh. Rizaldy Firmansyah": "3225600072", "Muhamad Izzat Zaidan": "3225600073", "Adrian Dwi Firmansyah": "3225600074", "Nafis Ubaidillah": "3225600075", "Khairu Farhan Ramadhan": "3225600076", "M. Amir Aisy Wijaya": "3225600078", "Mohammad Pujangga Gunawan": "3225600079", "Muhammad Nabil Syah Putra": "3225600080", "Aditya Wahyu Anggara": "3225600081", "Nadira Farah Parawansa": "3225600082", "Tasya Aulia Nabila": "3225600084", "Ridho Trifianto Putra": "3225600085", "Dimas Dharma Wijaya": "3225600086", "Faizar Ariq Setyawan": "3225600087", "Hafidz Abdurrahman Assiddiqie": "3225600088", "Mohammad Rafi Raissandi": "3225600089", "Dhiaz Nabihan Mahran": "3225600090"
     };
     
+    let totalCols = kasHeaders.length;
+    let maxPage = Math.ceil(totalCols / KAS_COLS_PER_PAGE) - 1;
+    if(currentKasPage > maxPage) currentKasPage = Math.max(0, maxPage);
+    if(currentKasPage < 0) currentKasPage = 0;
+    
+    let startCol = currentKasPage * KAS_COLS_PER_PAGE;
+    let endCol = Math.min(startCol + KAS_COLS_PER_PAGE, totalCols);
+
+    let btnPrev = document.getElementById('btnKasPrev');
+    let btnNext = document.getElementById('btnKasNext');
+    let indicator = document.getElementById('kasPageIndicator');
+    if(btnPrev) btnPrev.style.opacity = currentKasPage === 0 ? '0.5' : '1';
+    if(btnNext) btnNext.style.opacity = currentKasPage >= maxPage ? '0.5' : '1';
+    if(indicator) indicator.innerText = `Kolom ${totalCols > 0 ? startCol + 1 : 0} - ${endCol} dari ${totalCols}`;
+    
+    let roleSekarang = localStorage.getItem('user_role');
+    let canEdit = (roleSekarang === 'admin' || roleSekarang === 'bendahara');
+
     let theadHTML = `<tr style="background: var(--surface-hover); color: var(--text-muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px;"><th style="padding: 16px; text-align: left; position: sticky; left: 0; background: var(--surface-hover); z-index: 11; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);">Nama & NRP</th>`;
     
-    kasHeaders.forEach(hdr => {
+    for(let wIdx = startCol; wIdx < endCol; wIdx++){
+        let hdr = kasHeaders[wIdx];
+        let editIconHTML = canEdit ? `<i class='bx bx-pencil' style="cursor:pointer; color:var(--primary); margin-left: 6px; font-size: 14px; vertical-align: middle;" onclick="editKasHeader(${wIdx})" title="Edit Nama Kolom"></i>` : '';
         if(hdr === 'LIBUR SMT') {
-            theadHTML += `<th style="padding: 12px 8px; border-bottom: 1px solid var(--border); background: rgba(148, 163, 184, 0.05); color: var(--text-muted); min-width: 100px;">Des - Jan<br><small style="font-weight: 600; color: #94a3b8;">Libur Semester</small></th>`;
+            theadHTML += `<th style="padding: 12px 8px; border-bottom: 1px solid var(--border); background: rgba(148, 163, 184, 0.05); color: var(--text-muted); min-width: 100px;">Des - Jan<br><small style="font-weight: 600; color: #94a3b8;">Libur Semester</small>${editIconHTML}</th>`;
         } else {
             let splitHdr = hdr.split(' '); let bulan = splitHdr[0]; let kode = splitHdr[1] || ''; 
             let teksMinggu = kode === 'B1' ? 'Mg 1-2' : (kode === 'B2' ? 'Mg 3-4' : kode);
-            theadHTML += `<th style="padding: 12px 8px; border-bottom: 1px solid var(--border); min-width: 70px;">${bulan}<br><small style="font-weight: 600; color: var(--primary);">${teksMinggu}</small></th>`;
+            theadHTML += `<th style="padding: 12px 8px; border-bottom: 1px solid var(--border); min-width: 80px;">${bulan}<br><small style="font-weight: 600; color: var(--primary);">${teksMinggu}</small>${editIconHTML}</th>`;
         }
-    });
+    }
     theadHTML += `<th style="padding: 12px 16px; color: #10b981; border-bottom: 1px solid var(--border); border-left: 1px solid var(--border); background: var(--surface-hover);">Lunas</th><th style="padding: 12px 16px; color: #f43f5e; border-bottom: 1px solid var(--border); background: var(--surface-hover);">Nunggak</th></tr>`;
     thead.innerHTML = theadHTML;
 
     tbody.innerHTML = '';
-    
-    let roleSekarang = localStorage.getItem('user_role');
-let canEdit = (roleSekarang === 'admin' || roleSekarang === 'bendahara');
 
     dataKasMingguan.forEach((anggota, sIdx) => {
         let lunas = 0, nunggak = 0, cellHTML = '';
+        
         anggota.status.forEach((st, wIdx) => {
             let isLibur = (kasHeaders[wIdx] === 'LIBUR SMT');
             if (isLibur) {
-                cellHTML += `<td style="padding: 12px 8px; border-bottom: 1px solid var(--border); background: rgba(148, 163, 184, 0.05); font-weight: 700; color: var(--border);">-</td>`;
+                if(wIdx >= startCol && wIdx < endCol) {
+                    cellHTML += `<td style="padding: 12px 8px; border-bottom: 1px solid var(--border); background: rgba(148, 163, 184, 0.05); font-weight: 700; color: var(--border);">-</td>`;
+                }
             } else {
-                let icon = st === 1 ? `<i class='bx bx-check' style="color: #10b981; font-size: 20px; font-weight: bold;" title="Lunas"></i>` : `<i class='bx bx-x' style="color: #f43f5e; font-size: 20px; font-weight: bold;" title="Nunggak"></i>`;
                 if (st === 1) lunas++; else nunggak++;
-                let cursorStyle = canEdit ? 'cursor: pointer; background: var(--surface);' : 'cursor: default;';
-                let onClickAction = canEdit ? `onclick="toggleKasStatus(${sIdx}, ${wIdx})"` : ``; 
-                cellHTML += `<td style="padding: 12px 8px; border-bottom: 1px solid var(--border); ${cursorStyle} transition: 0.2s;" ${onClickAction}>${icon}</td>`;
+                if(wIdx >= startCol && wIdx < endCol) {
+                    let icon = st === 1 ? `<i class='bx bx-check' style="color: #10b981; font-size: 20px; font-weight: bold;" title="Lunas"></i>` : `<i class='bx bx-x' style="color: #f43f5e; font-size: 20px; font-weight: bold;" title="Nunggak"></i>`;
+                    let cursorStyle = canEdit ? 'cursor: pointer; background: var(--surface);' : 'cursor: default;';
+                    let onClickAction = canEdit ? `onclick="toggleKasStatus(${sIdx}, ${wIdx})"` : ``; 
+                    cellHTML += `<td style="padding: 12px 8px; border-bottom: 1px solid var(--border); ${cursorStyle} transition: 0.2s;" ${onClickAction}>${icon}</td>`;
+                }
             }
         });
+        
         let nrp = nrpMap[anggota.nama] || '-';
         tbody.innerHTML += `<tr style="transition: background 0.2s;" onmouseover="this.style.backgroundColor='var(--surface-hover)'" onmouseout="this.style.backgroundColor='transparent'"><td style="padding: 14px 16px; text-align: left; position: sticky; left: 0; background: var(--surface); z-index: 1; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); box-shadow: 2px 0 5px rgba(0,0,0,0.02);"><div style="font-weight: 700; color: var(--text-main); font-size: 13px; margin-bottom: 4px;">${anggota.nama}</div><div style="font-size: 11px; font-weight: 600; color: var(--text-muted); padding: 2px 6px; background: var(--bg-color); display: inline-block; border-radius: 4px; border: 1px solid var(--border);">${nrp}</div></td>${cellHTML}<td style="padding: 12px 16px; font-weight: 800; color: #10b981; border-bottom: 1px solid var(--border); border-left: 1px solid var(--border); background: var(--surface);">${lunas} Kali</td><td style="padding: 12px 16px; font-weight: 800; color: #f43f5e; border-bottom: 1px solid var(--border); background: var(--surface);">${nunggak} Kali</td></tr>`;
     });
